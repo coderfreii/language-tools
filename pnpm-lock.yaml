@@ -14,6 +14,12 @@ importers:
       '@lerna-lite/publish':
         specifier: latest
         version: 3.4.0(typescript@5.4.5)
+      '@tsslint/cli':
+        specifier: latest
+        version: 0.0.11(typescript@5.4.5)
+      '@tsslint/config':
+        specifier: latest
+        version: 0.0.11
       '@volar/language-service':
         specifier: ~2.3.0-alpha.0
         version: link:volar/volarJs/packages/language-service
@@ -6470,8 +6476,8 @@ snapshots:
   '@tsslint/cli@0.0.10(typescript@5.4.5)':
     dependencies:
       '@clack/prompts': 0.7.0
-      '@tsslint/config': 0.0.10
-      '@tsslint/core': 0.0.10
+      '@tsslint/config': 0.0.11
+      '@tsslint/core': 0.0.11
       glob: 10.3.15
       typescript: 5.4.5
 
