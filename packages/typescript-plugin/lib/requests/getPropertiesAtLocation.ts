@@ -1,6 +1,7 @@
-import { isCompletionEnabled } from '@vue/language-core';
+// import { isCompletionEnabled } from '@vue/language-core';
 import type * as ts from 'typescript';
 import type { RequestContext } from './types';
+import { isCompletionEnabled } from '@volar/language-core/lib/editorFeatures';
 
 export function getPropertiesAtLocation(
 	this: RequestContext,

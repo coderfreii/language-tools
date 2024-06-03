@@ -1,4 +1,3 @@
-import type { Disposable, LanguageServiceContext, LanguageServiceEnvironment, LanguageServicePluginInstance } from '@volar/language-service';
 import { VueVirtualCode, hyphenateAttr, hyphenateTag, parseScriptSetupRanges, tsCodegen } from '@vue/language-core';
 import { camelize, capitalize } from '@vue/shared';
 import { create as createHtmlService } from 'volar-service-html';
@@ -7,10 +6,11 @@ import * as html from 'vscode-html-languageservice';
 import type * as vscode from 'vscode-languageserver-protocol';
 import type { TextDocument } from 'vscode-languageserver-textdocument';
 import { getNameCasing } from '../ideFeatures/nameCasing';
-import { AttrNameCasing, LanguageServicePlugin, TagNameCasing, VueCompilerOptions } from '../types';
+import { AttrNameCasing, LanguageServicePlugin, TagNameCasing, VueCompilerOptions, type LanguageServiceContext, type LanguageServiceEnvironment, type LanguageServicePluginInstance } from '../types';
 import { loadModelModifiersData, loadTemplateData } from './data';
 import { URI, Utils } from 'vscode-uri';
 import { getComponentSpans } from '@vue/typescript-plugin/lib/common';
+import { Disposable} from 'vscode-jsonrpc'
 
 let builtInData: html.HTMLDataV1;
 let modelData: html.HTMLDataV1;

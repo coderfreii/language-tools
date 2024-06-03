@@ -1,7 +1,8 @@
-import type { LanguageServiceContext, LanguageServicePlugin, LanguageServicePluginInstance } from '@volar/language-service';
+
 import * as vue from '@vue/language-core';
 import type * as vscode from 'vscode-languageserver-protocol';
 import { URI } from 'vscode-uri';
+import type { LanguageServiceContext, LanguageServicePlugin, LanguageServicePluginInstance } from '../types';
 
 const twoslashReg = /<!--\s*\^\?\s*-->/g;
 

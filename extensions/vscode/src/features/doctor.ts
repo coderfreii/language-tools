@@ -1,8 +1,9 @@
-import { BaseLanguageClient, getTsdk } from '@volar/vscode';
-import { ParseSFCRequest } from '@vue/language-server';
+import { vscodeLanguageclient, getTsdk } from '@volar/vscode';
+// import { ParseSFCRequest } from '@vue/language-server';
 import * as semver from 'semver';
 import * as vscode from 'vscode';
 import { config } from '../config';
+import { ParseSFCRequest } from '@vue/language-server/lib/protocol';
 
 const scheme = 'vue-doctor';
 const knownValidSyntaxHighlightExtensions = {
@@ -11,7 +12,7 @@ const knownValidSyntaxHighlightExtensions = {
 	sass: ['Syler.sass-indented'],
 };
 
-export async function register(context: vscode.ExtensionContext, client: BaseLanguageClient) {
+export async function register(context: vscode.ExtensionContext, client: vscodeLanguageclient.BaseLanguageClient) {
 
 	const item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
 	item.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');

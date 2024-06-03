@@ -1,4 +1,4 @@
-import type { VirtualCode } from '@volar/language-core';
+// import type { VirtualCode } from '@volar/language-core';
 import { Signal, signal } from 'computeds';
 import type * as ts from 'typescript';
 import type { VueCompilerOptions, VueLanguagePlugin } from '../types';
@@ -6,6 +6,7 @@ import { computedFiles } from './computedFiles';
 import { computedMappings } from './computedMappings';
 import { computedSfc } from './computedSfc';
 import { computedVueSfc } from './computedVueSfc';
+import type { VirtualCode } from '@volar/language-core/lib/types';
 
 export class VueVirtualCode implements VirtualCode {
 

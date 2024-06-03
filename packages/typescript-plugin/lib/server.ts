@@ -1,4 +1,4 @@
-import type { Language, VueCompilerOptions } from '@vue/language-core';
+// import type { Language, VueCompilerOptions } from '@vue/language-core';
 import * as fs from 'fs';
 import * as net from 'net';
 import type * as ts from 'typescript';
@@ -9,6 +9,8 @@ import { getPropertiesAtLocation } from './requests/getPropertiesAtLocation';
 import { getQuickInfoAtPosition } from './requests/getQuickInfoAtPosition';
 import type { RequestContext } from './requests/types';
 import { NamedPipeServer, connect, readPipeTable, updatePipeTable } from './utils';
+import type { Language } from '@volar/language-core/lib/types';
+import type { VueCompilerOptions } from '@vue/language-core';
 
 export interface Request {
 	type: 'projectInfoForFile'

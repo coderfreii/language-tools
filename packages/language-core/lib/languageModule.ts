@@ -1,4 +1,4 @@
-import { forEachEmbeddedCode, type LanguagePlugin } from '@volar/language-core';
+// import { forEachEmbeddedCode, type LanguagePlugin } from '@volar/language-core';
 import type * as ts from 'typescript';
 import { getBasePlugins } from './plugins';
 import type { VueCompilerOptions, VueLanguagePlugin } from './types';
@@ -8,6 +8,8 @@ import * as CompilerVue2 from './utils/vue2TemplateCompiler';
 import useHtmlFilePlugin from './plugins/file-html';
 import useMdFilePlugin from './plugins/file-md';
 import useVueFilePlugin from './plugins/file-vue';
+import { forEachEmbeddedCode } from '@volar/language-core';
+import type { LanguagePlugin } from '@volar/language-core/lib/types';
 
 const normalFileRegistries: {
 	key: string;

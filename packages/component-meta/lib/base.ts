@@ -1,4 +1,3 @@
-import * as vue from '@vue/language-core';
 import type * as ts from 'typescript';
 import * as path from 'path-browserify';
 import { code as typeHelpersCode } from 'vue-component-type-helpers';
@@ -15,6 +14,17 @@ import type {
 	SlotMeta,
 	Declaration
 } from './types';
+import type { Language } from '@volar/language-core/lib/types';
+import { FileMap } from '@volar/language-core/lib/utils';
+import { VueVirtualCode, 
+	createLanguage, 
+	createParsedCommandLine, 
+	createParsedCommandLineByJson,
+	 createVueLanguagePlugin, 
+	 parseScriptSetupRanges, 
+	 type ParsedCommandLine, 
+	 type VueCompilerOptions 
+	} from '@vue/language-core';
 
 export * from './types';
 
@@ -29,7 +39,7 @@ export function createCheckerByJsonConfigBase(
 	rootDir = rootDir.replace(windowsPathReg, '/');
 	return createCheckerWorker(
 		ts,
-		() => vue.createParsedCommandLineByJson(ts, ts.sys, rootDir, json),
+		() => createParsedCommandLineByJson(ts, ts.sys, rootDir, json),
 		checkerOptions,
 		rootDir,
 		path.join(rootDir, 'jsconfig.json.global.vue'),
@@ -45,7 +55,7 @@ export function createCheckerBase(
 	tsconfig = tsconfig.replace(windowsPathReg, '/');
 	return createCheckerWorker(
 		ts,
-		() => vue.createParsedCommandLine(ts, ts.sys, tsconfig),
+		() => createParsedCommandLine(ts, ts.sys, tsconfig),
 		checkerOptions,
 		path.dirname(tsconfig),
 		tsconfig + '.global.vue',
@@ -55,7 +65,7 @@ export function createCheckerBase(
 
 function createCheckerWorker(
 	ts: typeof import('typescript'),
-	loadParsedCommandLine: () => vue.ParsedCommandLine,
+	loadParsedCommandLine: () => ParsedCommandLine,
 	checkerOptions: MetaCheckerOptions,
 	rootPath: string,
 	globalComponentName: string,
@@ -116,7 +126,7 @@ export function baseCreate(
 	ts: typeof import('typescript'),
 	configFileName: string | undefined,
 	projectHost: TypeScriptProjectHost,
-	vueCompilerOptions: vue.VueCompilerOptions,
+	vueCompilerOptions: VueCompilerOptions,
 	checkerOptions: MetaCheckerOptions,
 	globalComponentName: string,
 ) {
@@ -148,7 +158,7 @@ export function baseCreate(
 		}
 	};
 
-	const vueLanguagePlugin = vue.createVueLanguagePlugin<string>(
+	const vueLanguagePlugin = createVueLanguagePlugin<string>(
 		ts,
 		id => id,
 		ts.sys.useCaseSensitiveFileNames,
@@ -157,7 +167,7 @@ export function baseCreate(
 		projectHost.getCompilationSettings(),
 		vueCompilerOptions,
 	);
-	const language = vue.createLanguage(
+	const language = createLanguage(
 		[
 			vueLanguagePlugin,
 			{
@@ -166,7 +176,7 @@ export function baseCreate(
 				},
 			},
 		],
-		new vue.FileMap(ts.sys.useCaseSensitiveFileNames),
+		new FileMap(ts.sys.useCaseSensitiveFileNames),
 		fileName => {
 			const snapshot = projectHost.getScriptSnapshot(fileName);
 			if (snapshot) {
@@ -334,7 +344,7 @@ ${vueCompilerOptions.target < 3 ? vue2TypeHelpersCode : typeHelpersCode}
 
 			const vueFile = language.scripts.get(componentPath)?.generated?.root;
 			const vueDefaults = vueFile && exportName === 'default'
-				? (vueFile instanceof vue.VueVirtualCode ? readVueComponentDefaultProps(vueFile, printer, ts, vueCompilerOptions) : {})
+				? (vueFile instanceof VueVirtualCode ? readVueComponentDefaultProps(vueFile, printer, ts, vueCompilerOptions) : {})
 				: {};
 			const tsDefaults = !vueFile ? readTsComponentDefaultProps(
 				componentPath.substring(componentPath.lastIndexOf('.') + 1), // ts | js | tsx | jsx
@@ -479,7 +489,7 @@ function createSchemaResolvers(
 	symbolNode: ts.Expression,
 	{ rawType, schema: options, noDeclarations }: MetaCheckerOptions,
 	ts: typeof import('typescript'),
-	language: vue.Language<string>,
+	language: Language<string>,
 ) {
 	const visited = new Set<ts.Type>();
 
@@ -709,10 +719,10 @@ function createSchemaResolvers(
 }
 
 function readVueComponentDefaultProps(
-	vueSourceFile: vue.VueVirtualCode,
+	vueSourceFile: VueVirtualCode,
 	printer: ts.Printer | undefined,
 	ts: typeof import('typescript'),
-	vueCompilerOptions: vue.VueCompilerOptions,
+	vueCompilerOptions: VueCompilerOptions,
 ) {
 	let result: Record<string, { default?: string, required?: boolean; }> = {};
 
@@ -724,7 +734,7 @@ function readVueComponentDefaultProps(
 	function scriptSetupWorker() {
 
 		const descriptor = vueSourceFile.sfc;
-		const scriptSetupRanges = descriptor.scriptSetup ? vue.parseScriptSetupRanges(ts, descriptor.scriptSetup.ast, vueCompilerOptions) : undefined;
+		const scriptSetupRanges = descriptor.scriptSetup ? parseScriptSetupRanges(ts, descriptor.scriptSetup.ast, vueCompilerOptions) : undefined;
 
 		if (descriptor.scriptSetup && scriptSetupRanges?.props.withDefaults?.arg) {
 
@@ -842,7 +852,7 @@ function readTsComponentDefaultProps(
 				return component;
 			}
 			// export default defineComponent({ ... })
-			// export default Vue.extend({ ... })
+			// export default extend({ ... })
 			else if (ts.isCallExpression(component)) {
 				if (component.arguments.length) {
 					const arg = component.arguments[0];

@@ -3,6 +3,7 @@
 	"packageManager": "pnpm@9.1.0",
 	"scripts": {
 		"build": "tsc -b",
+		"clean": "tsc -b --clean",
 		"watch": "npm run build && (npm run watch:base & npm run watch:vue)",
 		"watch:base": "tsc -b -w",
 		"watch:vue": "cd ./extensions/vscode && npm run watch",
@@ -18,6 +19,7 @@
 		"lint": "tsl --projects {packages/*/tsconfig.json,extensions/*/tsconfig.json}",
 		"lint:fix": "npm run lint -- --fix",
 		"chrome": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=./extensions/vscode ../volar-starter"
+		,"clean:node_modules:window": "powershell -Command \"Get-ChildItem -Path . -Filter 'node_modules' -Recurse -Directory | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }\""
 	},
 	"devDependencies": {
 		"@lerna-lite/cli": "latest",

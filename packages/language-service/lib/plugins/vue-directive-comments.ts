@@ -1,4 +1,7 @@
-import type { CompletionItem, LanguageServicePlugin, LanguageServicePluginInstance } from '@volar/language-service';
+// import type { CompletionItem, LanguageServicePlugin, LanguageServicePluginInstance } from '@volar/language-service';
+
+import type { CompletionItem } from "vscode-languageserver-protocol";
+import type { LanguageServicePlugin, LanguageServicePluginInstance } from "../types";
 
 const cmds = [
 	'vue-ignore',

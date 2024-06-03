@@ -1,4 +1,4 @@
-import type { Mapping } from '@volar/language-core';
+// import type { Mapping } from '@volar/language-core';
 import type * as ts from 'typescript';
 import type { ScriptRanges } from '../../parsers/scriptRanges';
 import type { ScriptSetupRanges } from '../../parsers/scriptSetupRanges';
@@ -10,6 +10,7 @@ import { generateGlobalTypes } from './globalTypes';
 import { generateScriptSetup, generateScriptSetupImports } from './scriptSetup';
 import { generateSrc } from './src';
 import { generateTemplate } from './template';
+import type { Mapping } from '@volar/source-map';
 
 export const codeFeatures = {
 	all: {

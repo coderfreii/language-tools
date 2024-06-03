@@ -1,4 +1,4 @@
-import { toString } from '@volar/language-core';
+import { toString } from 'muggle-string';
 import * as CompilerDOM from '@vue/compiler-dom';
 import type { Code } from '../../types';
 import { newLine } from '../common';

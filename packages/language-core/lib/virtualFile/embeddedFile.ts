@@ -1,4 +1,5 @@
-import type { Mapping } from '@volar/language-core';
+// import type { Mapping } from '@volar/language-core';
+import type { Mapping } from '@volar/source-map';
 import type { Code } from '../types';
 
 export class VueEmbeddedCode {

@@ -1,4 +1,4 @@
-import type { Mapping } from '@volar/language-core';
+// import type { Mapping } from '@volar/language-core';
 import { computed } from 'computeds';
 import * as path from 'path-browserify';
 import { generateScript } from '../codegen/script';
@@ -6,6 +6,7 @@ import { generateTemplate } from '../codegen/template';
 import { parseScriptRanges } from '../parsers/scriptRanges';
 import { parseScriptSetupRanges } from '../parsers/scriptSetupRanges';
 import type { Code, Sfc, VueLanguagePlugin } from '../types';
+import type { Mapping } from '@volar/source-map';
 
 export const tsCodegen = new WeakMap<Sfc, ReturnType<typeof createTsx>>();
 

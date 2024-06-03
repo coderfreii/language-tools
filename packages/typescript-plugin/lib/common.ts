@@ -1,13 +1,18 @@
-import * as vue from '@vue/language-core';
+
 import { capitalize } from '@vue/shared';
 import type * as ts from 'typescript';
 import { _getComponentNames } from './requests/componentInfos';
 import type { RequestContext } from './requests/types';
+import type { VueCompilerOptions } from '@vue/language-core/lib/types';
+import type { Language } from '@volar/language-core/lib/types';
+import { VueVirtualCode } from '@vue/language-core/lib/virtualFile/vueFile';
+import { forEachElementNode } from '@vue/language-core/lib/codegen/template';
+import { hyphenateTag } from '@vue/language-core/lib/utils/shared';
 
 export function decorateLanguageServiceForVue<T>(
-	language: vue.Language<T>,
+	language: Language<T>,
 	languageService: ts.LanguageService,
-	vueOptions: vue.VueCompilerOptions,
+	vueOptions: VueCompilerOptions,
 	ts: typeof import('typescript'),
 	isTsPlugin: boolean,
 	getScriptId: (fileName: string) => T,
@@ -83,7 +88,7 @@ export function decorateLanguageServiceForVue<T>(
 			// @ts-expect-error
 			const { fileName } = args[6]?.__isAutoImport;
 			const sourceScript = language.scripts.get(getScriptId(fileName));
-			if (sourceScript?.generated?.root instanceof vue.VueVirtualCode) {
+			if (sourceScript?.generated?.root instanceof VueVirtualCode) {
 				const sfc = sourceScript.generated.root.getVueSfc();
 				if (!sfc?.descriptor.script && !sfc?.descriptor.scriptSetup) {
 					for (const codeAction of details?.codeActions ?? []) {
@@ -151,7 +156,7 @@ export function decorateLanguageServiceForVue<T>(
 		languageService.getEncodedSemanticClassifications = (fileName, span, format) => {
 			const result = getEncodedSemanticClassifications(fileName, span, format);
 			const file = language.scripts.get(getScriptId(fileName));
-			if (file?.generated?.root instanceof vue.VueVirtualCode) {
+			if (file?.generated?.root instanceof VueVirtualCode) {
 				const { template } = file.generated.root.sfc;
 				if (template) {
 					for (const componentSpan of getComponentSpans.call(
@@ -178,8 +183,8 @@ export function decorateLanguageServiceForVue<T>(
 
 export function getComponentSpans(
 	this: Pick<RequestContext, 'typescript' | 'languageService'>,
-	vueCode: vue.VueVirtualCode,
-	template: NonNullable<vue.VueVirtualCode['sfc']['template']>,
+	vueCode: VueVirtualCode,
+	template: NonNullable<VueVirtualCode['sfc']['template']>,
 	spanTemplateRange: ts.TextSpan,
 ) {
 	const { typescript: ts, languageService } = this;
@@ -187,10 +192,10 @@ export function getComponentSpans(
 	const validComponentNames = _getComponentNames(ts, languageService, vueCode);
 	const components = new Set([
 		...validComponentNames,
-		...validComponentNames.map(vue.hyphenateTag),
+		...validComponentNames.map(hyphenateTag),
 	]);
 	if (template.ast) {
-		for (const node of vue.forEachElementNode(template.ast)) {
+		for (const node of forEachElementNode(template.ast)) {
 			if (node.loc.end.offset <= spanTemplateRange.start || node.loc.start.offset >= (spanTemplateRange.start + spanTemplateRange.length)) {
 				continue;
 			}

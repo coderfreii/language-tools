@@ -1,11 +1,11 @@
 import { decorateLanguageService } from '@volar/typescript/lib/node/decorateLanguageService';
 import { decorateLanguageServiceHost, searchExternalFiles } from '@volar/typescript/lib/node/decorateLanguageServiceHost';
-import * as vue from '@vue/language-core';
-import { createLanguage } from '@vue/language-core';
+import { createLanguage, createParsedCommandLine, createParsedCommandLineByJson, createVueLanguagePlugin } from '@vue/language-core';
 import type * as ts from 'typescript';
 import { decorateLanguageServiceForVue } from './lib/common';
 import { startNamedPipeServer, projects } from './lib/server';
 import { resolveFileLanguageId } from '@volar/typescript';
+import { FileMap } from '@volar/language-core/lib/utils';
 
 const windowsPathReg = /\\/g;
 const externalFiles = new WeakMap<ts.server.Project, Set<string>>();
@@ -28,7 +28,7 @@ function createLanguageServicePlugin(): ts.server.PluginModuleFactory {
 					decoratedLanguageServiceHosts.add(info.languageServiceHost);
 
 					const vueOptions = getVueCompilerOptions();
-					const languagePlugin = vue.createVueLanguagePlugin<string>(
+					const languagePlugin = createVueLanguagePlugin<string>(
 						ts,
 						id => id,
 						info.languageServiceHost.useCaseSensitiveFileNames?.() ?? false,
@@ -40,7 +40,7 @@ function createLanguageServicePlugin(): ts.server.PluginModuleFactory {
 					const extensions = languagePlugin.typescript?.extraFileExtensions.map(ext => '.' + ext.extension) ?? [];
 					const getScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
 					const getScriptVersion = info.languageServiceHost.getScriptVersion.bind(info.languageServiceHost);
-					const syncedScriptVersions = new vue.FileMap<string>(ts.sys.useCaseSensitiveFileNames);
+					const syncedScriptVersions = new FileMap<string>(ts.sys.useCaseSensitiveFileNames);
 					const language = createLanguage<string>(
 						[
 							languagePlugin,
@@ -50,7 +50,7 @@ function createLanguageServicePlugin(): ts.server.PluginModuleFactory {
 								},
 							},
 						],
-						new vue.FileMap(ts.sys.useCaseSensitiveFileNames),
+						new FileMap(ts.sys.useCaseSensitiveFileNames),
 						fileName => {
 							const version = getScriptVersion(fileName);
 							if (syncedScriptVersions.get(fileName) === version) {
@@ -90,10 +90,10 @@ function createLanguageServicePlugin(): ts.server.PluginModuleFactory {
 				function getVueCompilerOptions() {
 					if (info.project.projectKind === ts.server.ProjectKind.Configured) {
 						const tsconfig = info.project.getProjectName();
-						return vue.createParsedCommandLine(ts, ts.sys, tsconfig.replace(windowsPathReg, '/')).vueOptions;
+						return createParsedCommandLine(ts, ts.sys, tsconfig.replace(windowsPathReg, '/')).vueOptions;
 					}
 					else {
-						return vue.createParsedCommandLineByJson(ts, ts.sys, info.languageServiceHost.getCurrentDirectory(), {}).vueOptions;
+						return createParsedCommandLineByJson(ts, ts.sys, info.languageServiceHost.getCurrentDirectory(), {}).vueOptions;
 					}
 				}
 			},

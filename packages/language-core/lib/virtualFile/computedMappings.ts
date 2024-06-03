@@ -1,8 +1,10 @@
-import { CodeMapping, Segment, replaceSourceRange } from '@volar/language-core';
+// import { CodeMapping, Segment, replaceSourceRange } from '@volar/language-core';
 import { computed } from 'computeds';
 import type * as ts from 'typescript';
 import type { Sfc, VueCodeInformation } from '../types';
 import { allCodeFeatures } from '../plugins/shared';
+import type { CodeMapping } from '@volar/language-core/lib/types';
+import { type Segment, replaceSourceRange } from 'muggle-string';
 
 export function computedMappings(
 	snapshot: () => ts.IScriptSnapshot,

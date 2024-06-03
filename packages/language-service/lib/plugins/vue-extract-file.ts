@@ -1,9 +1,9 @@
-import type { CreateFile, LanguageServiceContext, LanguageServicePlugin, TextDocumentEdit, TextEdit } from '@volar/language-service';
 import type { ExpressionNode, TemplateChildNode } from '@vue/compiler-dom';
 import { Sfc, VueVirtualCode, scriptRanges } from '@vue/language-core';
 import type * as ts from 'typescript';
 import type * as vscode from 'vscode-languageserver-protocol';
 import { URI } from 'vscode-uri';
+import type { LanguageServiceContext, LanguageServicePlugin } from '../types';
 
 interface ActionData {
 	uri: string;
@@ -165,7 +165,7 @@ export function create(
 										version: null,
 									},
 									edits: templateEdits,
-								} satisfies TextDocumentEdit,
+								} satisfies vscode.TextDocumentEdit,
 
 								// editing vue sfc
 								{
@@ -174,13 +174,13 @@ export function create(
 										version: null,
 									},
 									edits: sfcEdits,
-								} satisfies TextDocumentEdit,
+								} satisfies vscode.TextDocumentEdit,
 
 								// creating new file with content
 								{
 									uri: newUri,
 									kind: 'create',
-								} satisfies CreateFile,
+								} satisfies vscode.CreateFile,
 								{
 									textDocument: {
 										uri: newUri,
@@ -193,9 +193,9 @@ export function create(
 												end: { line: 0, character: 0 },
 											},
 											newText: newFileTags.join('\n'),
-										} satisfies TextEdit,
+										} satisfies vscode.TextEdit,
 									],
-								} satisfies TextDocumentEdit,
+								} satisfies vscode.TextDocumentEdit,
 							],
 						},
 					};

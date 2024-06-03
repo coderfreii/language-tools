@@ -1,4 +1,4 @@
-import type { LanguageServicePlugin, LanguageServicePluginInstance, LanguageServiceContext } from '@volar/language-service';
+// import type { LanguageServicePlugin, LanguageServicePluginInstance, LanguageServiceContext } from '@volar/language-service';
 import * as vue from '@vue/language-core';
 import { create as createHtmlService } from 'volar-service-html';
 import * as html from 'vscode-html-languageservice';
@@ -6,6 +6,7 @@ import type * as vscode from 'vscode-languageserver-protocol';
 import type { TextDocument } from 'vscode-languageserver-textdocument';
 import { loadLanguageBlocks } from './data';
 import { URI } from 'vscode-uri';
+import type { LanguageServicePlugin, LanguageServicePluginInstance, LanguageServiceContext } from '../types';
 
 let sfcDataProvider: html.IHTMLDataProvider | undefined;
 

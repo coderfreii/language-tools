@@ -1,4 +1,6 @@
-import type { CodeInformation } from '@volar/language-core';
+// import type { CodeInformation } from '@volar/language-core';
+
+import type { CodeInformation } from "@volar/language-core/lib/types";
 
 export const allCodeFeatures: CodeInformation = {
 	verification: true,

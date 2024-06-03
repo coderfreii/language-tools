@@ -1,4 +1,5 @@
-import type { CodeInformation } from '@volar/language-core';
+
+import type { CodeInformation } from '@volar/language-core/lib/types';
 import { createTsAst } from '../codegen/common';
 import { isCompoundExpression } from '../codegen/template/elementEvents';
 import { parseInterpolationNode } from '../codegen/template/templateChild';

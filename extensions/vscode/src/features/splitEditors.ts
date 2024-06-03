@@ -1,11 +1,11 @@
-import type { BaseLanguageClient } from '@volar/vscode';
-import { ParseSFCRequest } from '@vue/language-server';
+import type { vscodeLanguageclient } from '@volar/vscode';
 import * as vscode from 'vscode';
 import { config } from '../config';
+import { ParseSFCRequest } from '@vue/language-server/lib/protocol';
 
 type SFCBlock = ParseSFCRequest.ResponseType['descriptor']['customBlocks'][number];
 
-export function register(context: vscode.ExtensionContext, client: BaseLanguageClient) {
+export function register(context: vscode.ExtensionContext, client: vscodeLanguageclient.BaseLanguageClient) {
 
 	const getDocDescriptor = useDocDescriptor();
 

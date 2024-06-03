@@ -396,8 +396,8 @@
 		},
 		"commands": [
 			{
-				"command": "vue.action.restartServer",
-				"title": "Restart Vue and TS servers",
+				"command": "vue.action.showDynamicCommands",
+				"title": "Show Dynamic Commands",
 				"category": "Vue"
 			},
 			{

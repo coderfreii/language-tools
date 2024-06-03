@@ -3,8 +3,7 @@ export * from '@vue/language-core';
 export * from './lib/ideFeatures/nameCasing';
 export * from './lib/types';
 
-import type { LanguageServicePlugin, LanguageServiceContext, LanguageServiceEnvironment } from '@volar/language-service';
-import type { VueCompilerOptions } from './lib/types';
+import type { LanguageServiceContext, LanguageServiceEnvironment, LanguageServicePlugin, VueCompilerOptions } from './lib/types';
 
 import { create as createEmmetPlugin } from 'volar-service-emmet';
 import { create as createJsonPlugin } from 'volar-service-json';

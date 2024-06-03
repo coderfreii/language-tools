@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
 import { quickPick } from '@volar/vscode/lib/common';
-import { BaseLanguageClient, State } from '@volar/vscode';
-import { AttrNameCasing, TagNameCasing, DetectNameCasingRequest, GetConvertAttrCasingEditsRequest, GetConvertTagCasingEditsRequest } from '@vue/language-server';
+import { vscodeLanguageclient } from '@volar/vscode';
 import { config } from '../config';
 
+import { AttrNameCasing, TagNameCasing} from '@vue/language-service/lib/types'
+import { DetectNameCasingRequest, GetConvertAttrCasingEditsRequest, GetConvertTagCasingEditsRequest } from '@vue/language-server/lib/protocol'
 export const attrNameCasings = new Map<string, AttrNameCasing>();
 export const tagNameCasings = new Map<string, TagNameCasing>();
 
-export async function activate(_context: vscode.ExtensionContext, client: BaseLanguageClient, selector: vscode.DocumentSelector) {
+export async function activate(_context: vscode.ExtensionContext, client: vscodeLanguageclient.BaseLanguageClient, selector: vscode.DocumentSelector) {
 
 	await client.start();
 
@@ -89,7 +90,7 @@ export async function activate(_context: vscode.ExtensionContext, client: BaseLa
 	}));
 
 	client.onDidChangeState(e => {
-		if (e.newState === State.Stopped) {
+		if (e.newState === vscodeLanguageclient.State.Stopped) {
 			disposes.forEach(d => d.dispose());
 			statusBar.dispose();
 		}
