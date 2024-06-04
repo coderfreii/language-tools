@@ -13,3 +13,8 @@ packages/*/*.map
 packages/*/lib/**/*.d.ts
 packages/*/lib/**/*.js
 packages/*/lib/**/*.map
+
+
+vscode_common/**/*.d.ts
+vscode_common/**/*.js
+vscode_common/**/*.map
