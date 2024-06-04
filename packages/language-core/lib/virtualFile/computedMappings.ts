@@ -1,4 +1,3 @@
-// import { CodeMapping, Segment, replaceSourceRange } from '@volar/language-core';
 import { computed } from 'computeds';
 import type * as ts from 'typescript';
 import type { Sfc, VueCodeInformation } from '../types';

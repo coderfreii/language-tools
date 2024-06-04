@@ -2,4 +2,5 @@
 	"extends": "../../tsconfig.base.json",
 	"include": [ "*", "lib/**/*" ],
 	"exclude": [ "tests" ],
+	"references": [	{ "path": "../../other/computeds/tsconfig.json" },]
 }

@@ -1,4 +1,3 @@
-// import type { LanguageServiceContext, VirtualCode } from '@volar/language-service';
 import type { CompilerDOM } from '@vue/language-core';
 import * as vue from '@vue/language-core';
 import { VueVirtualCode, hyphenateAttr, hyphenateTag } from '@vue/language-core';
