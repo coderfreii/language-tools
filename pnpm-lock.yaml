@@ -261,8 +261,8 @@ importers:
         specifier: latest
         version: 1.0.2
       '@volar/kit':
-        specifier: ~2.3.0-alpha.0
-        version: 2.3.0-alpha.5(typescript@5.4.5)
+        specifier: 2.3.0-alpha.0
+        version: link:../../volar/volar.js/packages/kit
       vscode-languageserver-protocol:
         specifier: ^3.17.5
         version: 3.17.5
@@ -1950,23 +1950,6 @@ packages:
 
   '@vitest/utils@1.6.0':
     resolution: {integrity: sha512-21cPiuGMoMZwiOHa2i4LXkMkMkCGzA+MVFV70jRwHo95dL4x/ts5GZhML1QWuy7yfp3WzK3lRvZi3JnXTYqrBw==}
-
-  '@volar/kit@2.3.0-alpha.5':
-    resolution: {integrity: sha512-EG2YXMh8B3jx3KG2TZmr3aj5D5tviHy9DvjOR7SZ/HnQkP1St6qRnXWhAg3UQdBjr+y0T04NcM1Th1ltWhjnTQ==}
-    peerDependencies:
-      typescript: '*'
-
-  '@volar/language-core@2.3.0-alpha.5':
-    resolution: {integrity: sha512-A9IoRNc1dfeBrloaRg+4nSGwPMan+62dHDNMDGy2pQP/7Qu8Yrpa0v+6db8Ku7ruSzjnSATYHoWWGeFUnhhsnQ==}
-
-  '@volar/language-service@2.3.0-alpha.5':
-    resolution: {integrity: sha512-iJxlggv7n6q6S8mwNA5vMtb33nQdIoUSS/LZ4FkPQF0YPxPujaGljh8pMLwUZ1yt0FnlHeke2oltVbl2VU0yyw==}
-
-  '@volar/source-map@2.3.0-alpha.5':
-    resolution: {integrity: sha512-sgf5ddUacUEXUSd759jAiOz2q31ATgeMf85pGjE1ThbLFioNUy5vWdFSs96qS+ZiWZPiEhdoAAiF90CNI7u/VA==}
-
-  '@volar/typescript@2.3.0-alpha.5':
-    resolution: {integrity: sha512-lFfSIQMxx5IWpJ15v2cetxzsJh2egc/2I8tn2LPcl/1vtMStoIlX6T0h/R/5yUu2S+9vLMjKXwd3RPu/V9j6Ww==}
 
   '@vscode/emmet-helper@2.9.3':
     resolution: {integrity: sha512-rB39LHWWPQYYlYfpv9qCoZOVioPCftKXXqrsyqN1mTWZM6dTnONT63Db+03vgrBbHzJN45IrgS/AGxw9iiqfEw==}
@@ -6300,36 +6283,6 @@ snapshots:
       estree-walker: 3.0.3
       loupe: 2.3.7
       pretty-format: 29.7.0
-
-  '@volar/kit@2.3.0-alpha.5(typescript@5.4.5)':
-    dependencies:
-      '@volar/language-service': 2.3.0-alpha.5
-      '@volar/typescript': 2.3.0-alpha.5
-      typesafe-path: 0.2.2
-      typescript: 5.4.5
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
-
-  '@volar/language-core@2.3.0-alpha.5':
-    dependencies:
-      '@volar/source-map': 2.3.0-alpha.5
-
-  '@volar/language-service@2.3.0-alpha.5':
-    dependencies:
-      '@volar/language-core': 2.3.0-alpha.5
-      vscode-languageserver-protocol: 3.17.5
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
-
-  '@volar/source-map@2.3.0-alpha.5':
-    dependencies:
-      muggle-string: 0.4.1
-
-  '@volar/typescript@2.3.0-alpha.5':
-    dependencies:
-      '@volar/language-core': 2.3.0-alpha.5
-      path-browserify: 1.0.1
-      vscode-uri: 3.0.8
 
   '@vscode/emmet-helper@2.9.3':
     dependencies:
