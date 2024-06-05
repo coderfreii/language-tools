@@ -1,9 +1,0 @@
-[submodule "volar/services"]
-	path = volar/services
-	url = https://github.com/coderfreii/services.git
-[submodule "volar/volar.js"]
-	path = volar/volar.js
-	url = https://github.com/coderfreii/volar.js.git
-[submodule "other/computeds"]
-	path = other/computeds
-	url = https://github.com/coderfreii/computeds.git
