@@ -3,7 +3,6 @@
 	"include": [ "*", "lib/**/*" ],
 	"exclude": [ "tests" ],
 	"references": [
-		{ "path": "../../other/computeds/tsconfig.json" },
 		{ "path": "../language-core/tsconfig.json" },
 		{ "path": "../typescript-plugin/tsconfig.json" },
 		{ "path": "../../volar/services/tsconfig.json" },
