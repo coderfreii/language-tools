@@ -57,7 +57,7 @@ export function createHybridModeProjectFacade(
 								...sys,
 								version: 0,
 								async sync() {
-									return 0;
+									return await 0;
 								},
 								dispose() { },
 							},
@@ -77,7 +77,7 @@ export function createHybridModeProjectFacade(
 				return await simpleLs;
 			}
 		},
-		async getExistingLanguageServices() {
+		getExistingLanguageServices() {
 			return Promise.all([
 				...tsconfigProjects.values(),
 				simpleLs,

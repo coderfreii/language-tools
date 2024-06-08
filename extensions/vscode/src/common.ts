@@ -7,7 +7,7 @@ import { activeFeatures } from './features';
 import { UI } from './ui/languageStatus';
 import { appContext } from './common/context';
 import { configSection } from './common/const';
-import { path, vscodeWrapper } from 'vscode_common';
+import { vscodeWrapper } from 'vscode_common';
 
 let client: volarLsp.vscodeLanguageclient.BaseLanguageClient;
 
@@ -20,32 +20,7 @@ type CreateLanguageClient = (
 	outputChannel: vscode.OutputChannel,
 ) => volarLsp.vscodeLanguageclient.BaseLanguageClient;
 
-export async function activate(context: vscode.ExtensionContext, createLc: CreateLanguageClient) {
-    const customIconPath = context.asAbsolutePath(path.join('images', '1327960.svg'));
-	const iconPath = vscode.Uri.file(path.join(context.extensionPath, 'images', '1327960.svg'));
-    const iconMapping: { [key: string]: vscode.Uri } = {
-        '.vtx': vscode.Uri.file(context.asAbsolutePath('images/example.svg')),
-        // 添加更多的扩展名和对应的图标路径
-    };
-	
-
-    // 注册文件图标提供者
-    const disposable = vscode.window.registerFileDecorationProvider({
-        provideFileDecoration: (uri, _token) => {
-            const fileExtension = path.extname(uri.fsPath);
-            if (iconMapping[fileExtension]) {
-				console.log(customIconPath);
-                return {
-                    badge: iconPath.fsPath
-                };
-            }
-            return undefined;
-        }
-    });
-
-    context.subscriptions.push(disposable);
-
-	vscodeLibs.dynamicCommands.enable(context);
+export function activate(context: vscode.ExtensionContext, createLc: CreateLanguageClient) {
 
 	const stopCheck = vscode.window.onDidChangeActiveTextEditor(tryActivate);
 	tryActivate();

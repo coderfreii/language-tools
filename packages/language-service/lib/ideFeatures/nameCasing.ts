@@ -3,7 +3,7 @@ import * as vue from '@vue/language-core';
 import { VueVirtualCode, hyphenateAttr, hyphenateTag } from '@vue/language-core';
 import { computed } from 'computeds';
 import type * as vscode from 'vscode-languageserver-protocol';
-import { AttrNameCasing, TagNameCasing, type LanguageServiceContext } from '../types';
+import { AttrNameCasing, TagNameCasing, type LanguageServiceContext, type ProviderResult } from '../types';
 import type { URI } from 'vscode-uri';
 import type { VirtualCode } from '@volar/language-core/lib/types';
 
@@ -170,7 +170,7 @@ export async function detect(
 
 		return result;
 	}
-	async function getTagNameCase(file: VueVirtualCode): Promise<TagNameCasing[]> {
+	function getTagNameCase(file: VueVirtualCode): ProviderResult<TagNameCasing[]> {
 
 		const result = new Set<TagNameCasing>();
 
