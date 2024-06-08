@@ -161,9 +161,14 @@ export function baseCreate(
 	const vueLanguagePlugin = createVueLanguagePlugin<string>(
 		ts,
 		id => id,
-		ts.sys.useCaseSensitiveFileNames,
 		() => projectHost.getProjectVersion?.() ?? '',
-		() => projectHost.getScriptFileNames(),
+		fileName => {
+			const fileMap = new FileMap(ts.sys.useCaseSensitiveFileNames);
+			for (const vueFileName of projectHost.getScriptFileNames()) {
+				fileMap.set(vueFileName, undefined);
+			}
+			return fileMap.has(fileName);
+		},
 		projectHost.getCompilationSettings(),
 		vueCompilerOptions,
 	);

@@ -9,6 +9,7 @@ import { GetLanguagePlugin, createHybridModeProjectFacade } from './lib/hybridMo
 import { DetectNameCasingRequest, GetConnectedNamedPipeServerRequest, GetConvertAttrCasingEditsRequest, GetConvertTagCasingEditsRequest, ParseSFCRequest } from './lib/protocol';
 import type { VueInitializationOptions } from './lib/types';
 import { createTypeScriptProjectFacade, type LanguagePluginProvider } from '@volar/language-server/lib/project/typescriptProjectFacade';
+import { FileMap } from '@volar/language-core/lib/utils';
 
 
 
@@ -135,11 +136,16 @@ const getLanguagePlugins: GetLanguagePlugin<URI> = async ({ serviceEnv, configFi
 	const vueLanguagePlugin = createVueLanguagePlugin(
 		tsdk.typescript,
 		asFileName,
-		sys?.useCaseSensitiveFileNames ?? false,
 		() => projectHost?.getProjectVersion?.() ?? '',
-		() => projectHost?.getScriptFileNames() ?? [],
+		fileName => {
+			const fileMap = new FileMap(sys?.useCaseSensitiveFileNames ?? false);
+			for (const vueFileName of projectHost?.getScriptFileNames() ?? []) {
+				fileMap.set(vueFileName, undefined);
+			}
+			return fileMap.has(fileName);
+		},
 		commandLine?.options ?? {},
-		vueOptions,
+		vueOptions
 	);
 	if (!hybridMode) {
 		const extensions = [

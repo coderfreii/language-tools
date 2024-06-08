@@ -1,5 +1,6 @@
 import { runTsc } from '@volar/typescript/lib/quickstart/runTsc';
 import * as vue from '@vue/language-core';
+import { FileMap } from '@volar/language-core/lib/utils';
 
 const windowsPathReg = /\\/g;
 
@@ -32,9 +33,14 @@ export function run() {
 				const vueLanguagePlugin = vue.createVueLanguagePlugin<string>(
 					ts,
 					id => id,
-					options.host?.useCaseSensitiveFileNames?.() ?? false,
 					() => '',
-					() => options.rootNames.map(rootName => rootName.replace(windowsPathReg, '/')),
+					fileName => {
+						const fileMap = new FileMap(options.host?.useCaseSensitiveFileNames?.() ?? false);
+						for (const vueFileName of options.rootNames.map(rootName => rootName.replace(windowsPathReg, '/'))) {
+							fileMap.set(vueFileName, undefined);
+						}
+						return fileMap.has(fileName);
+					},
 					options.options,
 					vueOptions,
 				);

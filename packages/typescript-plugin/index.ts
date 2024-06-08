@@ -2,6 +2,7 @@ import { createLanguageServicePlugin, externalFiles } from '@volar/typescript/li
 import * as vue from '@vue/language-core';
 import { decorateLanguageServiceForVue } from './lib/common';
 import { projects, startNamedPipeServer } from './lib/server';
+import { FileMap } from '@volar/language-core/lib/utils';
 
 const windowsPathReg = /\\/g;
 
@@ -11,9 +12,16 @@ const plugin = createLanguageServicePlugin(
 		const languagePlugin = vue.createVueLanguagePlugin<string>(
 			ts,
 			id => id,
-			info.languageServiceHost.useCaseSensitiveFileNames?.() ?? false,
 			() => info.languageServiceHost.getProjectVersion?.() ?? '',
-			() => externalFiles.get(info.project) ?? [],
+			info.project.projectKind === ts.server.ProjectKind.Inferred
+				? () => true
+				: fileName => {
+					const fileMap = new FileMap(info.languageServiceHost.useCaseSensitiveFileNames?.() ?? false);
+					for (const vueFileName of externalFiles.get(info.project) ?? []) {
+						fileMap.set(vueFileName, undefined);
+					}
+					return fileMap.has(fileName);
+				},
 			info.languageServiceHost.getCompilationSettings(),
 			vueOptions
 		);
