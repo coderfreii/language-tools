@@ -185,7 +185,7 @@ function computedPluginEmbeddedCodes(
 				}
 				const block = nameToBlock()[source];
 				if (!block) {
-					console.warn('Unable to find block: ' + source);
+					// console.warn('Unable to find block: ' + source);
 					return segment;
 				}
 				return [
