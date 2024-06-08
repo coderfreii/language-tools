@@ -29,11 +29,15 @@ export function createHybridModeProjectFacade(
 	let initialized = false;
 	let simpleLs: Promise<LanguageService> | undefined;
 	let serviceEnv: LanguageServiceEnvironment | undefined;
+	let server: LanguageServer;
 
 	const tsconfigProjects = createUriMap<Promise<LanguageService>>(sys.useCaseSensitiveFileNames);
 
 	return {
-		async reolveLanguageServiceByUri(server, uri) {
+		setup(_server) {
+			server = _server;
+		},
+		async reolveLanguageServiceByUri(uri) {
 			if (!initialized) {
 				initialized = true;
 				initialize(server);

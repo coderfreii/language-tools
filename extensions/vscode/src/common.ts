@@ -149,7 +149,7 @@ async function getInitializationOptions(
 	hybridMode: boolean,
 ): Promise<VueInitializationOptions> {
 	return {
-		typescript: { tsdk: (await volarLsp.getTsdk(context)).tsdk },
+		typescript: { tsdk: (await volarLsp.getTsdk(context))!.tsdk },
 		vue: {
 			hybridMode,
 		},

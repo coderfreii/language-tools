@@ -77,10 +77,9 @@ export function create(
 						}
 						ast = getAst(ts, fileName, virtualCode.snapshot, serviceScript.scriptKind);
 						let mapped = false;
-						for (const [_1, [_2, map]] of context.language.maps.forEach(virtualCode)) {
-							const sourceOffset = map.getSourceOffset(document.offsetAt(selection));
-							if (sourceOffset !== undefined) {
-								sourceCodeOffset = sourceOffset[0];
+						for (const [_1, _2, map] of context.language.maps.forEach(virtualCode)) {
+							for (const [sourceOffset] of map.getSourceOffsets(document.offsetAt(selection))) {
+								sourceCodeOffset = sourceOffset;
 								mapped = true;
 								break;
 							}

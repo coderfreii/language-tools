@@ -125,7 +125,7 @@ connection.onRequest(GetConnectedNamedPipeServerRequest.type, async fileName => 
 });
 
 async function getService(uri: URI) {
-	return (await server.projectFacade.reolveLanguageServiceByUri(server, uri));
+	return (await server.projectFacade.reolveLanguageServiceByUri(uri));
 }
 
 
