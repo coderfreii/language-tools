@@ -58,6 +58,8 @@ export function run() {
 	} catch (err) {
 		if (err === extensionsChangedException) {
 			main();
+		} else {
+			console.error(err);
 		}
 	}
 }
