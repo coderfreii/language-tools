@@ -1,6 +1,6 @@
 import { decorateLanguageService } from '@volar/typescript/lib/node/decorateLanguageService';
 import { decorateLanguageServiceHost, searchExternalFiles } from '@volar/typescript/lib/node/decorateLanguageServiceHost';
-import { createLanguage, createParsedCommandLine, createParsedCommandLineByJson, createVueLanguagePlugin } from '@vue/language-core';
+import { createLanguage, createParsedCommandLineWithVueOptions, createParsedCommandLineWithVueOptionsByJson, createVueLanguagePlugin } from '@vue/language-core';
 import type * as ts from 'typescript';
 import { decorateLanguageServiceForVue } from './lib/common';
 import { startNamedPipeServer, projects } from './lib/server';
@@ -90,10 +90,10 @@ function createLanguageServicePlugin(): ts.server.PluginModuleFactory {
 				function getVueCompilerOptions() {
 					if (info.project.projectKind === ts.server.ProjectKind.Configured) {
 						const tsconfig = info.project.getProjectName();
-						return createParsedCommandLine(ts, ts.sys, tsconfig.replace(windowsPathReg, '/')).vueOptions;
+						return createParsedCommandLineWithVueOptions(ts, ts.sys, tsconfig.replace(windowsPathReg, '/')).vueOptions;
 					}
 					else {
-						return createParsedCommandLineByJson(ts, ts.sys, info.languageServiceHost.getCurrentDirectory(), {}).vueOptions;
+						return createParsedCommandLineWithVueOptionsByJson(ts, ts.sys, info.languageServiceHost.getCurrentDirectory(), {}).vueOptions;
 					}
 				}
 			},

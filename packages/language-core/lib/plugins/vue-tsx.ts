@@ -1,4 +1,3 @@
-// import type { Mapping } from '@volar/language-core';
 import { computed } from 'computeds';
 import * as path from 'path-browserify';
 import { generateScript } from '../codegen/script';

@@ -18,3 +18,5 @@ packages/*/lib/**/*.map
 vscode_common/**/*.d.ts
 vscode_common/**/*.js
 vscode_common/**/*.map
+
+/plugins

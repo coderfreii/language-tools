@@ -6,7 +6,7 @@ export type ParsedCommandLine = ts.ParsedCommandLine & {
 	vueOptions: VueCompilerOptions;
 };
 
-export function createParsedCommandLineByJson(
+export function createParsedCommandLineWithVueOptionsByJson(
 	ts: typeof import('typescript'),
 	parseConfigHost: ts.ParseConfigHost,
 	rootDir: string,
@@ -58,7 +58,7 @@ export function createParsedCommandLineByJson(
 	};
 }
 
-export function createParsedCommandLine(
+export function createParsedCommandLineWithVueOptions(
 	ts: typeof import('typescript'),
 	parseConfigHost: ts.ParseConfigHost,
 	tsConfigPath: string,
@@ -146,6 +146,7 @@ function getPartialVueCompilerOptions(
 ): Partial<VueCompilerOptions> {
 
 	const folder = path.dirname(tsConfigSourceFile.fileName);
+	folder
 	const obj = ts.convertToObject(tsConfigSourceFile, []);
 	const rawOptions: RawVueCompilerOptions = obj?.vueCompilerOptions ?? {};
 	const result: Partial<VueCompilerOptions> = {
@@ -203,7 +204,7 @@ function getPartialVueCompilerOptions(
 	function resolvePath(scriptPath: string): string | undefined {
 		try {
 			if (require?.resolve) {
-				return require.resolve(scriptPath, { paths: [folder] });
+				return require.resolve(scriptPath, { paths: ["D:/learnCode/frondend/vue3/language-tools/plugins/vue-macros/playground/vue3"] });
 			}
 			else {
 				// console.warn('failed to resolve path:', scriptPath, 'require.resolve is not supported in web');

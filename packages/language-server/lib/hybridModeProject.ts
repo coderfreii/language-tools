@@ -1,7 +1,7 @@
 import { createLanguage } from '@volar/language-core';
 import type { LanguagePlugin } from '@volar/language-core/lib/types';
 import { createLanguageServiceEnvironment } from '@volar/language-server/lib/project/simpleProject';
-import type { LanguageServer, Project } from '@volar/language-server/lib/types';
+import type { LanguageServer, ProjectFacade } from '@volar/language-server/lib/types';
 import type { LanguageServiceEnvironment, ProviderResult } from '@vue/language-service';
 // import { Disposable, LanguageService, LanguageServiceEnvironment, createLanguage, createLanguageService, createUriMap, type ProviderResult } from '@vue/language-service';
 import { searchNamedPipeServerForFile, TypeScriptProjectHost } from '@vue/typescript-plugin/lib/utils';
@@ -22,10 +22,10 @@ export type GetLanguagePlugin<T> = (params: {
 	} & Disposable,
 }) => ProviderResult<LanguagePlugin<URI>[]>;
 
-export function createHybridModeProject(
+export function createHybridModeProjectFacade(
 	sys: ts.System,
 	getLanguagePlugins: GetLanguagePlugin<URI>,
-): Project {
+): ProjectFacade {
 	let initialized = false;
 	let simpleLs: Promise<LanguageService> | undefined;
 	let serviceEnv: LanguageServiceEnvironment | undefined;
@@ -33,7 +33,7 @@ export function createHybridModeProject(
 	const tsconfigProjects = createUriMap<Promise<LanguageService>>(sys.useCaseSensitiveFileNames);
 
 	return {
-		async getLanguageService(server, uri) {
+		async reolveLanguageServiceByUri(server, uri) {
 			if (!initialized) {
 				initialized = true;
 				initialize(server);
@@ -114,8 +114,8 @@ export function createHybridModeProject(
 		languagePlugins: LanguagePlugin<URI>[],
 	) {
 		const language = createLanguage(languagePlugins, createUriMap(), uri => {
-			const documentKey = server.getSyncedDocumentKey(uri);
-			const document = documentKey ? server.documents.get(documentKey) : undefined;
+			const documentKey = server.documents.getSyncedDocumentKey(uri);
+			const document = documentKey ? server.documents.documents.get(documentKey) : undefined;
 			if (document) {
 				language.scripts.set(uri, document.getSnapshot(), document.languageId);
 			}

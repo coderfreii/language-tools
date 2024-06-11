@@ -14,7 +14,7 @@ export function run() {
 		(ts, options) => {
 			const { configFilePath } = options.options;
 			const vueOptions = typeof configFilePath === 'string'
-				? vue.createParsedCommandLine(ts, ts.sys, configFilePath.replace(windowsPathReg, '/')).vueOptions
+				? vue.createParsedCommandLineWithVueOptions(ts, ts.sys, configFilePath.replace(windowsPathReg, '/')).vueOptions
 				: vue.resolveVueCompilerOptions({});
 			const allExtensions = [
 				...vueOptions.extensions,

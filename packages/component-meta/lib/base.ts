@@ -18,8 +18,8 @@ import type { Language } from '@volar/language-core/lib/types';
 import { FileMap } from '@volar/language-core/lib/utils';
 import { VueVirtualCode, 
 	createLanguage, 
-	createParsedCommandLine, 
-	createParsedCommandLineByJson,
+	createParsedCommandLineWithVueOptions, 
+	createParsedCommandLineWithVueOptionsByJson,
 	 createVueLanguagePlugin, 
 	 parseScriptSetupRanges, 
 	 type ParsedCommandLine, 
@@ -39,7 +39,7 @@ export function createCheckerByJsonConfigBase(
 	rootDir = rootDir.replace(windowsPathReg, '/');
 	return createCheckerWorker(
 		ts,
-		() => createParsedCommandLineByJson(ts, ts.sys, rootDir, json),
+		() => createParsedCommandLineWithVueOptionsByJson(ts, ts.sys, rootDir, json),
 		checkerOptions,
 		rootDir,
 		path.join(rootDir, 'jsconfig.json.global.vue'),
@@ -55,7 +55,7 @@ export function createCheckerBase(
 	tsconfig = tsconfig.replace(windowsPathReg, '/');
 	return createCheckerWorker(
 		ts,
-		() => createParsedCommandLine(ts, ts.sys, tsconfig),
+		() => createParsedCommandLineWithVueOptions(ts, ts.sys, tsconfig),
 		checkerOptions,
 		path.dirname(tsconfig),
 		tsconfig + '.global.vue',

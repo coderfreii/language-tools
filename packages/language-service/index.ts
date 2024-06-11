@@ -34,64 +34,28 @@ import { getQuickInfoAtPosition } from '@vue/typescript-plugin/lib/requests/getQ
 import type { RequestContext } from '@vue/typescript-plugin/lib/requests/types';
 import { URI } from 'vscode-uri';
 
+export type VueCompilerOptionsProvider = (env: LanguageServiceEnvironment) => VueCompilerOptions;
+
+export type TsPluginClientProvider = (context: LanguageServiceContext) => typeof import('@vue/typescript-plugin/lib/client') | undefined;
+
 export function getVueLanguageServicePlugins(
 	ts: typeof import('typescript'),
-	getVueOptions: (env: LanguageServiceEnvironment) => VueCompilerOptions,
-	getTsPluginClient = createDefaultGetTsPluginClient(ts),
+	vueCompilerOptionsProvider: VueCompilerOptionsProvider,
+	tsPluginClientProvider = createDefaultGetTsPluginClient(ts),
 	hybridMode = false,
 ): LanguageServicePlugin[] {
 	const plugins: LanguageServicePlugin[] = [];
-	if (!hybridMode) {
-		plugins.push(...createTypeScriptPlugins(ts));
-		for (let i = 0; i < plugins.length; i++) {
-			const plugin = plugins[i];
-			if (plugin.name === 'typescript-semantic') {
-				plugins[i] = {
-					...plugin,
-					create(context, api) {
-						const created = plugin.create(context, api);
-						if (!context.language.typescript) {
-							return created;
-						}
-						const languageService = (created.provide as import('volar-service-typescript').Provide)['typescript/languageService']();
-						const vueOptions = getVueOptions(context.env);
-						decorateLanguageServiceForVue<URI>(
-							context.language,
-							languageService,
-							vueOptions,
-							ts,
-							false,
-							fileName => context.language.typescript?.asScriptId(fileName) ?? URI.file(fileName),
-						);
-						return created;
-					},
-				};
-				break;
-			}
-		}
-	}
-	else {
-		plugins.push(
-			createTypeScriptSyntacticPlugin(ts),
-			createTypeScriptDocCommentTemplatePlugin(ts),
-		);
-	}
+
+	setupTSSupportPlugins(plugins, ts, vueCompilerOptionsProvider, hybridMode);
+
+	createEnhancedPlugins(plugins, ts, vueCompilerOptionsProvider, tsPluginClientProvider);
+
+	
 	plugins.push(
+		createVueExtractFilePlugin(ts, tsPluginClientProvider),
+		createVueAutoDotValuePlugin(ts, tsPluginClientProvider),
+		createVueTwoslashQueriesPlugin(ts, tsPluginClientProvider),
 		createTypeScriptTwoslashQueriesPlugin(ts),
-		createCssPlugin(),
-		createPugFormatPlugin(),
-		createJsonPlugin(),
-		createVueTemplatePlugin('html', ts, getVueOptions, getTsPluginClient),
-		createVueTemplatePlugin('pug', ts, getVueOptions, getTsPluginClient),
-		createVueSfcPlugin(),
-		createVueTwoslashQueriesPlugin(ts, getTsPluginClient),
-		createVueDocumentLinksPlugin(),
-		createVueDocumentDropPlugin(ts, getVueOptions, getTsPluginClient),
-		createVueAutoDotValuePlugin(ts, getTsPluginClient),
-		createVueAutoAddSpacePlugin(),
-		createVueVisualizeHiddenCallbackParamPlugin(),
-		createVueDirectiveCommentsPlugin(),
-		createVueExtractFilePlugin(ts, getTsPluginClient),
 		createVueToggleVBindPlugin(ts),
 		createEmmetPlugin({
 			mappedLanguages: {
@@ -99,6 +63,16 @@ export function getVueLanguageServicePlugins(
 				'postcss': 'scss',
 			},
 		}),
+		createVueDirectiveCommentsPlugin(),
+		createCssPlugin(),
+		createPugFormatPlugin(),
+		createJsonPlugin(),
+		createVueSfcPlugin(),
+		createVueDocumentLinksPlugin(),
+		createVueAutoAddSpacePlugin(),
+		createVueVisualizeHiddenCallbackParamPlugin(),
+
+
 	);
 	return plugins;
 }
@@ -150,4 +124,73 @@ export function createDefaultGetTsPluginClient(ts: typeof import('typescript')):
 			},
 		};
 	};
+}
+
+
+
+function createEnhancedPlugins(
+	plugins: LanguageServicePlugin[],
+	ts: typeof import('typescript'),
+	vueCompilerOptionsProvider: VueCompilerOptionsProvider,
+	tsPluginClientProvider: TsPluginClientProvider
+) {
+	plugins.push(
+		createVueTemplatePlugin('html', ts, vueCompilerOptionsProvider, tsPluginClientProvider),
+		createVueTemplatePlugin('pug', ts, vueCompilerOptionsProvider, tsPluginClientProvider),
+		createVueDocumentDropPlugin(ts, vueCompilerOptionsProvider, tsPluginClientProvider)
+	);
+}
+
+
+function setupTSSupportPlugins(
+	plugins: LanguageServicePlugin[],
+	ts: typeof import('typescript'),
+	vueCompilerOptionsProvider: VueCompilerOptionsProvider,
+	hybridMode = false,
+) {
+	if (!hybridMode) {
+		plugins.push(...createTypeScriptPlugins(ts));
+		enhanceTypescriptSemantic(plugins, ts, vueCompilerOptionsProvider);
+	}
+	else {
+		plugins.push(
+			createTypeScriptSyntacticPlugin(ts),
+			createTypeScriptDocCommentTemplatePlugin(ts),
+		);
+	}
+}
+
+
+function enhanceTypescriptSemantic(
+	plugins: LanguageServicePlugin[],
+	ts: typeof import('typescript'),
+	vueCompilerOptionsProvider: VueCompilerOptionsProvider
+
+) {
+	for (let i = 0; i < plugins.length; i++) {
+		const plugin = plugins[i];
+		if (plugin.name === 'typescript-semantic') {
+			plugins[i] = {
+				...plugin,
+				create(context, api) {
+					const created = plugin.create(context, api);
+					if (!context.language.typescript) {
+						return created;
+					}
+					const languageService = (created.provide as import('volar-service-typescript').Provide)['typescript/languageService']();
+					const vueOptions = vueCompilerOptionsProvider(context.env);
+					decorateLanguageServiceForVue<URI>(
+						context.language,
+						languageService,
+						vueOptions,
+						ts,
+						false,
+						fileName => context.language.typescript?.asScriptId(fileName) ?? URI.file(fileName),
+					);
+					return created;
+				},
+			};
+			break;
+		}
+	}
 }

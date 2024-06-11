@@ -1,21 +1,34 @@
 import type { Connection } from 'vscode-languageserver';
 import { createConnection, createServer, loadTsdkByPath } from '@volar/language-server/node';
-import { ParsedCommandLine, VueCompilerOptions, createParsedCommandLine, createVueLanguagePlugin, parse, resolveVueCompilerOptions } from '@vue/language-core';
-import { LanguageServiceEnvironment, convertAttrName, convertTagName, createDefaultGetTsPluginClient, detect, getVueLanguageServicePlugins } from '@vue/language-service';
+import { ParsedCommandLine, VueCompilerOptions, createParsedCommandLineWithVueOptions, createVueLanguagePlugin, parse, resolveVueCompilerOptions } from '@vue/language-core';
+import { LanguageServiceEnvironment, convertAttrName, convertTagName, createDefaultGetTsPluginClient, detect, getVueLanguageServicePlugins, type TsPluginClientProvider, type VueCompilerOptionsProvider } from '@vue/language-service';
 import * as tsPluginClient from '@vue/typescript-plugin/lib/client';
 import { searchNamedPipeServerForFile } from '@vue/typescript-plugin/lib/utils';
 import { URI } from 'vscode-uri';
-import { GetLanguagePlugin, createHybridModeProject } from './lib/hybridModeProject';
+import { GetLanguagePlugin, createHybridModeProjectFacade } from './lib/hybridModeProject';
 import { DetectNameCasingRequest, GetConnectedNamedPipeServerRequest, GetConvertAttrCasingEditsRequest, GetConvertTagCasingEditsRequest, ParseSFCRequest } from './lib/protocol';
 import type { VueInitializationOptions } from './lib/types';
-import { createTypeScriptProject } from '@volar/language-server/lib/project/typescriptProject';
+import { createTypeScriptProjectFacade, type LanguagePluginSProvider } from '@volar/language-server/lib/project/typescriptProject';
+
+
+
 
 
 let tsdk: ReturnType<typeof loadTsdkByPath>;
 let hybridMode: boolean;
-let getTsPluginClient: ReturnType<typeof createDefaultGetTsPluginClient>;
+let tsPluginClientProvider: TsPluginClientProvider;
 
 const envToVueOptions = new WeakMap<LanguageServiceEnvironment, VueCompilerOptions>();
+
+const vueCompilerOptionsProvider: VueCompilerOptionsProvider = env => envToVueOptions.get(env)!;
+
+const languagePluginSProvider: LanguagePluginSProvider = (env, ctx) => getLanguagePlugins({
+	serviceEnv: env,
+	configFileName: ctx.configFileName,
+	projectHost: ctx.projectHost,
+	sys: ctx.sys,
+	asFileName: ctx.asFileName,
+});
 
 const watchedExtensions = new Set<string>();
 
@@ -29,29 +42,32 @@ connection.onInitialize(params => {
 	const options: VueInitializationOptions = params.initializationOptions;
 
 	hybridMode = options.vue?.hybridMode ?? true;
-	
+
 	tsdk = loadTsdkByPath(options.typescript.tsdk, params.locale);
 
-	getTsPluginClient = resolveTsPlugin()
+	tsPluginClientProvider = resolveTsPlugin();
+
+
+	const plugins = getVueLanguageServicePlugins(
+		tsdk.typescript,
+		vueCompilerOptionsProvider,
+		tsPluginClientProvider,
+		hybridMode,
+	);
+
+	const projectFacade = hybridMode
+		? createHybridModeProjectFacade(tsdk.typescript.sys, getLanguagePlugins)
+		: createTypeScriptProjectFacade(
+			tsdk.typescript,
+			tsdk.diagnosticMessages,
+			languagePluginSProvider
+		);
 
 
 	const result = server.initialize(
 		params,
-		getVueLanguageServicePlugins(
-			tsdk.typescript,
-			env => envToVueOptions.get(env)!,
-			getTsPluginClient,
-			hybridMode,
-		),
-		hybridMode
-			? createHybridModeProject(tsdk.typescript.sys, getLanguagePlugins)
-			: createTypeScriptProject(tsdk.typescript, tsdk.diagnosticMessages, (env, ctx) => getLanguagePlugins({
-				serviceEnv: env,
-				configFileName: ctx.configFileName,
-				projectHost: ctx.projectHost,
-				sys: ctx.sys,
-				asFileName: ctx.asFileName,
-			})),
+		plugins,
+		projectFacade,
 		{
 			pullModelDiagnostics: hybridMode,
 		},
@@ -89,7 +105,7 @@ connection.onRequest(GetConvertTagCasingEditsRequest.type, async params => {
 	const uri = URI.parse(params.textDocument.uri);
 	const languageService = await getService(uri);
 	if (languageService) {
-		return await convertTagName(languageService.context, uri, params.casing, getTsPluginClient(languageService.context));
+		return await convertTagName(languageService.context, uri, params.casing, tsPluginClientProvider(languageService.context));
 	}
 });
 
@@ -97,7 +113,7 @@ connection.onRequest(GetConvertAttrCasingEditsRequest.type, async params => {
 	const uri = URI.parse(params.textDocument.uri);
 	const languageService = await getService(uri);
 	if (languageService) {
-		return await convertAttrName(languageService.context, uri, params.casing, getTsPluginClient(languageService.context));
+		return await convertAttrName(languageService.context, uri, params.casing, tsPluginClientProvider(languageService.context));
 	}
 });
 
@@ -109,7 +125,7 @@ connection.onRequest(GetConnectedNamedPipeServerRequest.type, async fileName => 
 });
 
 async function getService(uri: URI) {
-	return (await server.project.getLanguageService(server, uri));
+	return (await server.projectFacade.reolveLanguageServiceByUri(server, uri));
 }
 
 
@@ -137,7 +153,7 @@ const getLanguagePlugins: GetLanguagePlugin<URI> = async ({ serviceEnv, configFi
 			for (const ext of newExtensions) {
 				watchedExtensions.add(ext);
 			}
-			server.watchFiles(['**/*.{' + newExtensions.join(',') + '}']);
+			server.filerWatcher.watchFiles(['**/*.{' + newExtensions.join(',') + '}']);
 		}
 	}
 
@@ -153,7 +169,7 @@ const getLanguagePlugins: GetLanguagePlugin<URI> = async ({ serviceEnv, configFi
 			while (sysVersion !== newSysVersion) {
 				sysVersion = newSysVersion;
 				if (configFileName) {
-					commandLine = createParsedCommandLine(tsdk.typescript, sys, configFileName);
+					commandLine = createParsedCommandLineWithVueOptions(tsdk.typescript, sys, configFileName);
 				}
 				newSysVersion = await sys.sync();
 			}
@@ -164,7 +180,7 @@ const getLanguagePlugins: GetLanguagePlugin<URI> = async ({ serviceEnv, configFi
 
 
 
-function resolveTsPlugin(){
+function resolveTsPlugin() {
 	if (hybridMode) {
 		return () => tsPluginClient;
 	}
