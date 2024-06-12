@@ -8,7 +8,7 @@ import { URI } from 'vscode-uri';
 import { GetLanguagePlugin, createHybridModeProjectFacade } from './lib/hybridModeProject';
 import { DetectNameCasingRequest, GetConnectedNamedPipeServerRequest, GetConvertAttrCasingEditsRequest, GetConvertTagCasingEditsRequest, ParseSFCRequest } from './lib/protocol';
 import type { VueInitializationOptions } from './lib/types';
-import { createTypeScriptProjectFacade, type LanguagePluginSProvider } from '@volar/language-server/lib/project/typescriptProject';
+import { createTypeScriptProjectFacade, type LanguagePluginProvider } from '@volar/language-server/lib/project/typescriptProjectFacade';
 
 
 
@@ -22,10 +22,10 @@ const envToVueOptions = new WeakMap<LanguageServiceEnvironment, VueCompilerOptio
 
 const vueCompilerOptionsProvider: VueCompilerOptionsProvider = env => envToVueOptions.get(env)!;
 
-const languagePluginSProvider: LanguagePluginSProvider = (env, ctx) => getLanguagePlugins({
+const languagePluginSProvider: LanguagePluginProvider = (env, ctx) => getLanguagePlugins({
 	serviceEnv: env,
 	configFileName: ctx.configFileName,
-	projectHost: ctx.projectHost,
+	projectHost: ctx.languageServiceHost,
 	sys: ctx.sys,
 	asFileName: ctx.asFileName,
 });

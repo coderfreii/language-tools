@@ -2,7 +2,7 @@ import type * as ts from 'typescript';
 import * as path from 'path-browserify';
 import { code as typeHelpersCode } from 'vue-component-type-helpers';
 import { code as vue2TypeHelpersCode } from 'vue-component-type-helpers/vue2';
-import { TypeScriptProjectHost, createLanguageServiceHost, resolveFileLanguageId } from '@volar/typescript';
+import {  TypeScriptProjectLanguageServiceHost,  createTsLanguageServiceHost, resolveFileLanguageId } from '@volar/typescript';
 
 import type {
 	MetaCheckerOptions,
@@ -81,7 +81,7 @@ function createCheckerWorker(
 	let projectVersion = 0;
 
 	const scriptSnapshots = new Map<string, ts.IScriptSnapshot>();
-	const projectHost: TypeScriptProjectHost = {
+	const projectHost: TypeScriptProjectLanguageServiceHost = {
 		getCurrentDirectory: () => rootPath,
 		getProjectVersion: () => projectVersion.toString(),
 		getCompilationSettings: () => parsedCommandLine.options,
@@ -125,7 +125,7 @@ function createCheckerWorker(
 export function baseCreate(
 	ts: typeof import('typescript'),
 	configFileName: string | undefined,
-	projectHost: TypeScriptProjectHost,
+	projectHost: TypeScriptProjectLanguageServiceHost,
 	vueCompilerOptions: VueCompilerOptions,
 	checkerOptions: MetaCheckerOptions,
 	globalComponentName: string,
@@ -192,7 +192,7 @@ export function baseCreate(
 		configFileName,
 		asFileName: s => s,
 		asScriptId: s => s,
-		...createLanguageServiceHost(ts, ts.sys, language, s => s, projectHost),
+		...createTsLanguageServiceHost(ts, ts.sys, language, s => s, projectHost),
 	};
 	const { languageServiceHost } = language.typescript;
 	const tsLs = ts.createLanguageService(languageServiceHost);

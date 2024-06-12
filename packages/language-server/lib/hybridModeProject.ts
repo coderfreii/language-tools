@@ -4,7 +4,7 @@ import { createLanguageServiceEnvironment } from '@volar/language-server/lib/pro
 import type { LanguageServer, ProjectFacade } from '@volar/language-server/lib/types';
 import type { LanguageServiceEnvironment, ProviderResult } from '@vue/language-service';
 // import { Disposable, LanguageService, LanguageServiceEnvironment, createLanguage, createLanguageService, createUriMap, type ProviderResult } from '@vue/language-service';
-import { searchNamedPipeServerForFile, TypeScriptProjectHost } from '@vue/typescript-plugin/lib/utils';
+import { searchNamedPipeServerForFile, TypeScriptProjectLanguageServiceHost } from '@vue/typescript-plugin/lib/utils';
 import type * as ts from 'typescript';
 import { URI } from 'vscode-uri';
 import { createUriMap } from '@volar/language-service/lib/utils/uriMap';
@@ -15,7 +15,7 @@ export type GetLanguagePlugin<T> = (params: {
 	serviceEnv: LanguageServiceEnvironment,
 	asFileName: (scriptId: T) => string,
 	configFileName?: string,
-	projectHost?: TypeScriptProjectHost,
+	projectHost?: TypeScriptProjectLanguageServiceHost,
 	sys?: ts.System & {
 		version: number;
 		sync(): Promise<number>;
