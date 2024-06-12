@@ -7,12 +7,13 @@ import vueTemplateHtmlPlugin from './plugins/vue-template-html';
 import vueTemplateInlineCssPlugin from './plugins/vue-template-inline-css';
 import vueTemplateInlineTsPlugin from './plugins/vue-template-inline-ts';
 import vueTsx from './plugins/vue-tsx';
+import Tsx from './plugins/tsx';
 import { pluginVersion, type VueLanguagePlugin } from './types';
 
 export * from './plugins/shared'
 
 export function getBasePlugins(pluginContext: Parameters<VueLanguagePlugin>[0]) {
-
+Tsx
 	const plugins: VueLanguagePlugin[] = [
 		vueScriptJsPlugin,
 		vueTemplateHtmlPlugin,

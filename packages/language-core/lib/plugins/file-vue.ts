@@ -1,5 +1,5 @@
 import type { VueLanguagePlugin } from '../types';
-import { parse } from '../utils/parseSfc';
+import { parse,parseTsx } from '../utils/parseSfc';
 
 const plugin: VueLanguagePlugin = _ctx => {
 
@@ -8,6 +8,9 @@ const plugin: VueLanguagePlugin = _ctx => {
 		version: 2,
 
 		parseSFC(_fileName, content) {
+			if(_fileName.endsWith(".tsx")){
+				return parseTsx( content,"<script lang='tsx'>" , "\n</script>")
+			}
 			return parse(content);
 		},
 

@@ -64,6 +64,74 @@ export function parse(source: string): SFCParseResult {
 	};
 }
 
+
+export function parseTsx(source: string, prefix: string, subfix: string): SFCParseResult {
+	const _source = source;
+	source = prefix + source + subfix;
+
+	const errors: CompilerError[] = [];
+	const ast = compiler.parse(source, {
+		// there are no components at SFC parsing level
+		isNativeTag: () => true,
+		// preserve all whitespaces
+		isPreTag: () => true,
+		parseMode: 'sfc',
+		onError: e => {
+			errors.push(e);
+		},
+		comments: true,
+	});
+	const descriptor: SFCDescriptor = {
+		filename: 'anonymous.vue',
+		source: _source,
+		template: null,
+		script: null,
+		scriptSetup: null,
+		styles: [],
+		customBlocks: [],
+		cssVars: [],
+		slotted: false,
+		shouldForceReload: () => false,
+	};
+
+
+	ast.children.forEach(node => {
+		if (node.type !== compiler.NodeTypes.ELEMENT) {
+			return;
+		}
+
+		if (node.tag === 'script') {
+			const scriptBlock = createBlock(node, source) as SFCScriptBlock;
+			const isSetup = !!scriptBlock.attrs.setup;
+
+			if (!isSetup) {
+				node.innerLoc = {
+					start: {
+						line: 1,
+						column: 1,
+						offset: node.innerLoc!.start.offset - prefix.length
+					},
+					end: {
+						line: node.innerLoc!.end.line - 1,
+						column: node.innerLoc!.end.column - prefix.length,
+						offset: node.innerLoc!.end.offset - prefix.length
+					},
+					source: node.innerLoc!.source
+				};
+				node.loc = node.innerLoc!;
+				node.children[0].loc = 	node.innerLoc
+				const scriptBlock = createBlock(node, _source) as SFCScriptBlock;
+				descriptor.script = scriptBlock;
+			}
+		}
+	});
+
+	return {
+		descriptor,
+		errors,
+	};
+}
+
 function createBlock(node: ElementNode, source: string) {
 	const type = node.tag;
 	let { start, end } = node.loc;
