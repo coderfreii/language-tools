@@ -10,7 +10,7 @@
 			"args": [
 				// "--disable-extensions",
 				"--extensionDevelopmentPath=${workspaceRoot}/extensions/vscode",
-				"--folder-uri=D:/learnCode/frondend/ts/base-project"
+				"--folder-uri=D:/code/work/other/baseProject"
 			],
 			"outFiles": [
 				"${workspaceRoot}/**/*.js"

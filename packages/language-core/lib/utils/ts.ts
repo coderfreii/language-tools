@@ -204,7 +204,7 @@ function getPartialVueCompilerOptions(
 	function resolvePath(scriptPath: string): string | undefined {
 		try {
 			if (require?.resolve) {
-				return require.resolve(scriptPath, { paths: ["D:/learnCode/frondend/vue3/____language/plugins/vue-macros/playground/vue3"] });
+				return require.resolve(scriptPath, { paths: ["D:/code/interest/vue3/____language/plugins/vue-macros/playground/vue3"] });
 			}
 			else {
 				// console.warn('failed to resolve path:', scriptPath, 'require.resolve is not supported in web');
