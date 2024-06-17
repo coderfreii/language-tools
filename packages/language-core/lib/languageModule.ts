@@ -107,7 +107,7 @@ export function createVueLanguagePlugin<T>(
 			}
 		},
 		createVirtualCode(scriptId, languageId, snapshot) {
-			if (languageId === 'vue' || languageId === 'markdown' || languageId === 'html') {
+			if (languageId === 'vue' || languageId === 'markdown' || languageId === 'html' || languageId === 'typescriptreact') {
 				const fileName = asFileName(scriptId);
 				const projectVersion = getProjectVersion();
 				if (projectVersion !== canonicalRootFileNamesVersion) {
