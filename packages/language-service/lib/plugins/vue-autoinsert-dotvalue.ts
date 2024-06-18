@@ -83,6 +83,9 @@ export function create(
 								mapped = true;
 								break;
 							}
+							if (mapped) {
+								break;
+							}
 						}
 						if (!mapped) {
 							return;
