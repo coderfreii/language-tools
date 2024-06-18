@@ -113,10 +113,7 @@ export function createHybridModeProjectFacade(
 		serviceEnv: LanguageServiceEnvironment,
 		languagePlugins: LanguagePlugin<URI>[],
 	) {
-		const language = createLanguage([
-			{ getLanguageId: uri => server.documents.documents.get(server.documents.getSyncedDocumentKey(uri) ?? uri.toString())?.languageId },
-			...languagePlugins,
-		], createUriMap(), uri => {
+		const language = createLanguage(languagePlugins, createUriMap(), uri => {
 			const documentKey = server.documents.getSyncedDocumentKey(uri);
 			const document = documentKey ? server.documents.documents.get(documentKey) : undefined;
 			if (document) {
