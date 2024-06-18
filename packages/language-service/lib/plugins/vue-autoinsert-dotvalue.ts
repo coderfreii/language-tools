@@ -114,6 +114,7 @@ function isTsDocument(document: TextDocument) {
 	return document.languageId === 'javascript' ||
 		document.languageId === 'typescript' ||
 		document.languageId === 'javascriptreact' ||
+		document.languageId === 'typescriptreact-vtx' ||
 		document.languageId === 'typescriptreact';
 }
 

@@ -35,6 +35,13 @@
 		}
 	},
 	"contributes": {
+		"iconThemes": [
+			{
+				"id": "vtx-icons",
+				"label": "VTX Icons",
+				"path": "./icons/_material-icons.json"
+			}
+		],
 		"jsonValidation": [
 			{
 				"fileMatch": "tsconfig.json",
@@ -86,10 +93,10 @@
 				"configuration": "./languages/sfc-template-language-configuration.json"
 			},
 			{
-				"id": "vue",
-				"extensions": [
-					".vtx"
-				]
+				"id": "typescriptreact-vtx",
+				"aliases": [ "TypeScript React VTX", "typescriptreact-vtx" ],
+				"extensions": [ ".vtx" ],
+				"configuration": "./languages/language-configuration.json"
 			}
 		],
 		"typescriptServerPlugins": [
@@ -101,12 +108,17 @@
 		],
 		"grammars": [
 			{
+				"language": "typescriptreact-vtx",
+				"scopeName": "source.tsx",
+				"path": "./syntaxes/TypeScriptReact.tmLanguage.json"
+			},
+			{
 				"language": "vue",
 				"scopeName": "source.vue",
 				"path": "./syntaxes/vue.tmLanguage.json",
 				"embeddedLanguages": {
 					"source.vue": "vue",
-					"text": "plaintext",
+					"text": "typescriptreact",
 					"text.html.derivative": "html",
 					"text.html.markdown": "markdown",
 					"text.pug": "jade",

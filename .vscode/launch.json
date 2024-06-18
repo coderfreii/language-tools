@@ -9,7 +9,8 @@
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				// "--disable-extensions",
-				"--extensionDevelopmentPath=${workspaceRoot}/extensions/vscode"
+				"--extensionDevelopmentPath=${workspaceRoot}/extensions/vscode",
+				"--folder-uri=D:/learnCode/frondend/ts/base-project"
 			],
 			"outFiles": [
 				"${workspaceRoot}/**/*.js"
@@ -41,7 +42,7 @@
 			"name": "Attach to Language Server",
 			"type": "node",
 			"request": "attach",
-			"port": 6009,
+			"port": 9700,
 			"restart": true,
 			"outFiles": [
 				"${workspaceRoot}/**/*.js"

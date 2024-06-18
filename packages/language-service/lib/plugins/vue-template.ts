@@ -1,5 +1,5 @@
 import { VueVirtualCode, hyphenateAttr, hyphenateTag, parseScriptSetupRanges, tsCodegen } from '@vue/language-core';
-import { camelize, capitalize } from '@vue/shared';
+import { camelize, capitalize, hyphenate } from '@vue/shared';
 import { create as createHtmlService } from 'volar-service-html';
 import { create as createPugService } from 'volar-service-pug';
 import * as html from 'vscode-html-languageservice';
@@ -19,7 +19,7 @@ export function create(
 	mode: 'html' | 'pug',
 	ts: typeof import('typescript'),
 	getVueOptions: (env: LanguageServiceEnvironment) => VueCompilerOptions,
-	getTsPluginClient?: (context: LanguageServiceContext) => typeof import('@vue/typescript-plugin/lib/client') | undefined,
+	getTsPluginClient?: (context: LanguageServiceContext) => typeof import('@vue/typescript-plugin/lib/client') | undefined
 ): LanguageServicePlugin {
 
 	let customData: html.IHTMLDataProvider[] = [];
@@ -68,7 +68,7 @@ export function create(
 			},
 			inlayHintProvider: {},
 			hoverProvider: true,
-			diagnosticProvider: true,
+			diagnosticProvider: {},
 			semanticTokensProvider: {
 				legend: {
 					tokenTypes: ['class'],
@@ -76,9 +76,9 @@ export function create(
 				},
 			}
 		},
-		create(context, api): LanguageServicePluginInstance {
+		create(context): LanguageServicePluginInstance {
 			const tsPluginClient = getTsPluginClient?.(context);
-			const baseServiceInstance = baseService.create(context, api);
+			const baseServiceInstance = baseService.create(context);
 			const vueCompilerOptions = getVueOptions(context.env);
 
 			builtInData ??= loadTemplateData(context.env.locale ?? 'en');
@@ -158,7 +158,7 @@ export function create(
 					if (sourceScript?.generated?.root instanceof VueVirtualCode) {
 						await afterHtmlCompletion(
 							htmlComplete,
-							context.documents.get(sourceScript.id, sourceScript.languageId, sourceScript.snapshot),
+							context.documents.get(sourceScript.id, sourceScript.languageId, sourceScript.snapshot)
 						);
 					}
 
@@ -500,7 +500,10 @@ export function create(
 									const events = await tsPluginClient?.getComponentEvents(vueCode.fileName, tag) ?? [];
 									tagInfos.set(tag, {
 										attrs,
-										props,
+										props: props.filter(prop =>
+											!prop.startsWith('ref_')
+											&& !hyphenate(prop).startsWith('on-vnode-')
+										),
 										events,
 									});
 									version++;
@@ -531,7 +534,7 @@ export function create(
 									attributes.push(
 										{
 											name: dir,
-										},
+										}
 									);
 								}
 							}
@@ -558,7 +561,7 @@ export function create(
 										{
 											name: '@' + propNameBase,
 											description: propKey,
-										},
+										}
 									);
 								}
 								{
@@ -578,7 +581,7 @@ export function create(
 										{
 											name: 'v-bind:' + propName,
 											description: propKey,
-										},
+										}
 									);
 								}
 							}
@@ -644,7 +647,7 @@ export function create(
 				};
 			}
 
-			async function afterHtmlCompletion(completionList: vscode.CompletionList, sourceDocument: TextDocument) {
+			function afterHtmlCompletion(completionList: vscode.CompletionList, sourceDocument: TextDocument) {
 
 				const replacement = getReplacement(completionList, sourceDocument);
 
@@ -735,7 +738,17 @@ export function create(
 						const [componentName] = itemId.args;
 
 						if (componentName !== '*') {
-							item.sortText = '\u0000' + (item.sortText ?? item.label);
+							if (
+								item.label === 'class'
+								|| item.label === 'ref'
+								|| item.label.endsWith(':class')
+								|| item.label.endsWith(':ref')
+							) {
+								item.sortText = '\u0000' + (item.sortText ?? item.label);
+							}
+							else {
+								item.sortText = '\u0000\u0000' + (item.sortText ?? item.label);
+							}
 						}
 
 						if (itemId.type === 'componentProp') {

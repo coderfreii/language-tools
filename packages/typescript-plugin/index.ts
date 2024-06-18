@@ -39,10 +39,10 @@ const plugin = createLanguageServicePlugin(
 		function getVueCompilerOptions() {
 			if (info.project.projectKind === ts.server.ProjectKind.Configured) {
 				const tsconfig = info.project.getProjectName();
-				return vue.createParsedCommandLine(ts, ts.sys, tsconfig.replace(windowsPathReg, '/')).vueOptions;
+				return vue.createParsedCommandLineWithVueOptions(ts, ts.sys, tsconfig.replace(windowsPathReg, '/')).vueOptions;
 			}
 			else {
-				return vue.createParsedCommandLineByJson(ts, ts.sys, info.languageServiceHost.getCurrentDirectory(), {}).vueOptions;
+				return vue.createParsedCommandLineWithVueOptionsByJson(ts, ts.sys, info.languageServiceHost.getCurrentDirectory(), {}).vueOptions;
 			}
 		}
 	}

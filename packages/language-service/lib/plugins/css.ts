@@ -1,13 +1,13 @@
-// import type { LanguageServicePlugin, LanguageServicePluginInstance } from '@volar/language-service';
+
+import type { LanguageServicePlugin, LanguageServicePluginInstance } from '@volar/language-service/lib/types';
 import { create as baseCreate } from 'volar-service-css';
-import type { LanguageServicePlugin, LanguageServicePluginInstance } from '../types';
 
 export function create(): LanguageServicePlugin {
 	const base = baseCreate({ scssDocumentSelector: ['scss', 'postcss'] });
 	return {
 		...base,
-		create(context, api): LanguageServicePluginInstance {
-			const baseInstance = base.create(context, api);
+		create(context): LanguageServicePluginInstance {
+			const baseInstance = base.create(context);
 			return {
 				...baseInstance,
 				async provideDiagnostics(document, token) {

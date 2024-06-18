@@ -172,8 +172,8 @@ function enhanceTypescriptSemantic(
 		if (plugin.name === 'typescript-semantic') {
 			plugins[i] = {
 				...plugin,
-				create(context, api) {
-					const created = plugin.create(context, api);
+				create(context) {
+					const created = plugin.create(context);
 					if (!context.language.typescript) {
 						return created;
 					}
@@ -185,7 +185,7 @@ function enhanceTypescriptSemantic(
 						vueOptions,
 						ts,
 						false,
-						fileName => context.language.typescript?.asScriptId(fileName) ?? URI.file(fileName),
+						fileName => context.language.typescript?.asScriptId(fileName) ?? URI.file(fileName)
 					);
 					return created;
 				},
