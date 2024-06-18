@@ -1,9 +1,10 @@
+import { toString } from 'muggle-string';
 import type { SFCBlock } from '@vue/compiler-sfc';
+import type { Segment } from 'muggle-string';
 import type { VueLanguagePlugin } from '../types';
 import { parse } from '../utils/parseSfc';
-import {  buildMappings,SourceMap } from '@volar/source-map';
-import { type Segment } from 'muggle-string';
-import { toString } from 'muggle-string';
+import { SourceMap } from '@volar/source-map/lib/sourceMap';
+import { buildMappings } from '@volar/source-map/lib/buildMappings';
 
 const codeblockReg = /(`{3,})[\s\S]+?\1/g;
 const inlineCodeblockReg = /`[^\n`]+?`/g;
@@ -75,8 +76,16 @@ const plugin: VueLanguagePlugin = () => {
 			return sfc;
 
 			function transformRange(block: SFCBlock) {
-				block.loc.start.offset = file2VueSourceMap.getSourceOffset(block.loc.start.offset)?.[0] ?? -1;
-				block.loc.end.offset = file2VueSourceMap.getSourceOffset(block.loc.end.offset)?.[0] ?? -1;
+				block.loc.start.offset = -1;
+				block.loc.end.offset = -1;
+				for (const [start] of file2VueSourceMap.getSourceOffsets(block.loc.start.offset)) {
+					block.loc.start.offset = start;
+					break;
+				}
+				for (const [end] of file2VueSourceMap.getSourceOffsets(block.loc.end.offset)) {
+					block.loc.end.offset = end;
+					break;
+				}
 			}
 		}
 	};
