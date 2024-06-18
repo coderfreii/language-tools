@@ -84,6 +84,12 @@
 			{
 				"id": "plaintext",
 				"configuration": "./languages/sfc-template-language-configuration.json"
+			},
+			{
+				"id": "vue",
+				"extensions": [
+					".vtx"
+				]
 			}
 		],
 		"typescriptServerPlugins": [

@@ -5,3 +5,4 @@ packages:
   - 'volar/**'
   - 'vscode_common'
   - 'other-third-part/**'
+  - '!plugins/*'

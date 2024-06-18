@@ -8,7 +8,7 @@ const plugin: VueLanguagePlugin = _ctx => {
 		version: 2,
 
 		parseSFC(_fileName, content) {
-			if(_fileName.endsWith(".tsx")){
+			if(_fileName.endsWith(".vtx")){
 				return parseTsx( content,"<script lang='tsx'>" , "\n</script>")
 			}
 			return parse(content);

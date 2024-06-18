@@ -27,6 +27,7 @@ export async function activate(context: vscode.ExtensionContext, createLc: Creat
 	tryActivate();
 
 	function tryActivate() {
+		console.log(vscode.window.visibleTextEditors[0]?.document.languageId);
 		if (vscode.window.visibleTextEditors.some(editor => config.server.includeLanguages.includes(editor.document.languageId))) {
 			doActivate(context, createLc);
 			stopCheck.dispose();
