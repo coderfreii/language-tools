@@ -47,7 +47,7 @@ to enabel it you should do some work as the follow
    }
    
    if you open a project out of workspace ${projectPath} and you also want debugging vue-macros
-   you should add  pluginLoadPathForDebuggingPurpose  in vueCompilerOptions as demo
+   you should add  pluginLoadPathForDebuggingPurpose  in vueCompilerOptions as above
 
 2. add typescriptreact-vtx to vscode setting "vue.server.includeLanguages" 
 
