@@ -1,12 +1,16 @@
 [submodule "other-third-part/computeds"]
 	path = other-third-part/computeds
 	url = https://github.com/coderfreii/computeds.git
+	branch = master
 [submodule "volar/volarJs"]
 	path = volar/volarJs
 	url = https://github.com/coderfreii/volar.js.git
+	branch = self-version
 [submodule "volar/services"]
 	path = volar/services
 	url = https://github.com/coderfreii/services.git
+	branch = self-version
 [submodule "plugins/vue-macros"]
 	path = plugins/vue-macros
 	url = https://github.com/coderfreii/vue-macros.git
+	branch = main
