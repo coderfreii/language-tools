@@ -13,7 +13,7 @@ pnpm i
 
 pnpm run build
 
-cd  ./plugins/vue-marcos
+cd  ./plugins/vue-macros
 
 pnpm i 
 
