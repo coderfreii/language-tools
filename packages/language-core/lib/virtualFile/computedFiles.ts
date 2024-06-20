@@ -6,7 +6,7 @@ import type { Code, Sfc, SfcBlock, VueLanguagePlugin } from '../types';
 
 import { VueEmbeddedCode } from './embeddedFile';
 import type { VirtualCode } from '@volar/language-core/lib/types';
-import { buildMappings } from '@volar/source-map/lib/buildMappings';
+import { buildMappings } from '../utils/buildMappings';
 
 export function computedFiles(
 	plugins: ReturnType<VueLanguagePlugin>[],

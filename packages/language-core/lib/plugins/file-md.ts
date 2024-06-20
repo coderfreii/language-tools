@@ -4,7 +4,7 @@ import type { Segment } from 'muggle-string';
 import type { VueLanguagePlugin } from '../types';
 import { parse } from '../utils/parseSfc';
 import { SourceMap } from '@volar/source-map/lib/sourceMap';
-import { buildMappings } from '@volar/source-map/lib/buildMappings';
+import { buildMappings } from '../utils/buildMappings';
 
 const codeblockReg = /(`{3,})[\s\S]+?\1/g;
 const inlineCodeblockReg = /`[^\n`]+?`/g;
