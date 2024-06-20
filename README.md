@@ -1,5 +1,64 @@
 # Vue Language Tools
 
+
+
+~~~powershell
+this is a customer version
+
+how to build?
+
+cd ${projectPath}
+
+pnpm i
+
+pnpm run build
+
+cd  ./plugins/vue-marcos
+
+pnpm i 
+
+pnpm run build
+
+cd  ${projectPath}/extensions/vscode
+
+pnpm run build
+
+cd ${projectPath}
+
+press F5 to run 
+
+
+
+
+
+
+this project provide a rough demo feature for file with extension “.vtx”
+
+to enabel it you should do some work as the follow
+
+
+1.
+  add config to active tsconfig in extension development host vscode window
+
+  "vueCompilerOptions": {
+    "extensions":[".vue",".vtx"],
+    "pluginLoadPathForDebuggingPurpose":"${projectPath/plugins/vue-macros/playground/vue3",
+   ...
+   }
+   
+   if you open a project out of workspace ${projectPath} and you also want debugging vue-macros
+   you should add it to vueCompilerOptions as demo
+
+2. add typescriptreact-vtx to vscode setting "vue.server.includeLanguages" 
+
+
+3. that,s all
+~~~
+
+
+
+
+
 > ⚡ High-performance Vue language tooling based-on [Volar.js](https://volarjs.dev/)
 
 💬 **#language-tools** on our [Discord Server](https://discord.gg/vue)  
