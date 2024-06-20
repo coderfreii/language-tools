@@ -29,6 +29,8 @@ export interface VueCodeInformation extends CodeInformation {
 export type Code = Segment<VueCodeInformation>;
 
 export interface VueCompilerOptions {
+	pluginLoadPathForDebuggingPurpose?:string
+
 	target: number;
 	lib: string;
 	extensions: string[];

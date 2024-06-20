@@ -1,4 +1,3 @@
-// import type { Language, VueCompilerOptions } from '@vue/language-core';
 import * as fs from 'fs';
 import * as net from 'net';
 import type * as ts from 'typescript';

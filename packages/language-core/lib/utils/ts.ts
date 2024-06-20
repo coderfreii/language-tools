@@ -146,13 +146,14 @@ function getPartialVueCompilerOptions(
 ): Partial<VueCompilerOptions> {
 
 	const folder = path.dirname(tsConfigSourceFile.fileName);
-	folder
 	const obj = ts.convertToObject(tsConfigSourceFile, []);
 	const rawOptions: RawVueCompilerOptions = obj?.vueCompilerOptions ?? {};
 	const result: Partial<VueCompilerOptions> = {
 		...rawOptions as any,
 	};
 	const target = rawOptions.target ?? 'auto';
+
+	const pluginLoadPathForDebuggingPurpose = rawOptions.pluginLoadPathForDebuggingPurpose
 
 	if (target === 'auto') {
 		const resolvedPath = resolvePath('vue/package.json');
@@ -201,10 +202,13 @@ function getPartialVueCompilerOptions(
 
 	return result;
 
+
+	function loadPath() { return [pluginLoadPathForDebuggingPurpose ? pluginLoadPathForDebuggingPurpose : folder]; };
+
 	function resolvePath(scriptPath: string): string | undefined {
 		try {
 			if (require?.resolve) {
-				return require.resolve(scriptPath, { paths: ["D:/code/interest/vue3/____language/plugins/vue-macros/playground/vue3"] });
+				return require.resolve(scriptPath, { paths: loadPath() });
 			}
 			else {
 				// console.warn('failed to resolve path:', scriptPath, 'require.resolve is not supported in web');

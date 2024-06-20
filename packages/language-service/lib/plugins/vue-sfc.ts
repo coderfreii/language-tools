@@ -1,4 +1,3 @@
-// import type { LanguageServicePlugin, LanguageServicePluginInstance, LanguageServiceContext } from '@volar/language-service';
 import * as vue from '@vue/language-core';
 import { create as createHtmlService } from 'volar-service-html';
 import * as html from 'vscode-html-languageservice';

@@ -1,4 +1,3 @@
-// import type { Mapping } from '@volar/language-core';
 import type * as ts from 'typescript';
 import type { ScriptRanges } from '../../parsers/scriptRanges';
 import type { ScriptSetupRanges } from '../../parsers/scriptSetupRanges';

@@ -5,8 +5,8 @@ import * as lsp from '@volar/vscode/node';
 import { activate as commonActivate, deactivate as commonDeactivate } from './common';
 import { config } from './config';
 import { middleware } from './middleware';
-import { patch } from './patch';
 import { forCompatible } from './common/compatible';
+import { patch } from './patch';
 
 
 export async function activate(context: vscode.ExtensionContext) {

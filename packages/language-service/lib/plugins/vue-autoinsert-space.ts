@@ -1,5 +1,3 @@
-// import type { LanguageServicePlugin, LanguageServicePluginInstance } from '@volar/language-service';
-
 import type { LanguageServicePlugin, LanguageServicePluginInstance } from "../types";
 
 export function create(): LanguageServicePlugin {

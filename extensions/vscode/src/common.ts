@@ -20,7 +20,9 @@ type CreateLanguageClient = (
 	outputChannel: vscode.OutputChannel,
 ) => volarLsp.vscodeLanguageclient.BaseLanguageClient;
 
-export function activate(context: vscode.ExtensionContext, createLc: CreateLanguageClient) {
+export async function activate(context: vscode.ExtensionContext, createLc: CreateLanguageClient) {
+	vscodeLibs.dynamicCommands.enable(context);
+
 
 	const stopCheck = vscode.window.onDidChangeActiveTextEditor(tryActivate);
 	tryActivate();
@@ -55,7 +57,7 @@ async function doActivate(context: vscode.ExtensionContext, createLanguageClient
 		'Vue',
 		selectors,
 		await getInitializationOptions(context, enabledHybridMode),
-		9700,
+		6009,
 		outputChannel
 	);
 

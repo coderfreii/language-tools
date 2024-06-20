@@ -110,7 +110,10 @@
 			{
 				"language": "typescriptreact-vtx",
 				"scopeName": "source.tsx",
-				"path": "./syntaxes/TypeScriptReact.tmLanguage.json"
+				"path": "./syntaxes/TypeScriptReact.tmLanguage.json",
+				"embeddedLanguages": {
+					"typescriptreact-vtx":"vue"
+				}
 			},
 			{
 				"language": "vue",

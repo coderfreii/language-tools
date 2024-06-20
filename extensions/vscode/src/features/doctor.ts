@@ -1,5 +1,4 @@
 import { vscodeLanguageclient, getTsdk } from '@volar/vscode';
-// import { ParseSFCRequest } from '@vue/language-server';
 import * as semver from 'semver';
 import * as vscode from 'vscode';
 import { config } from '../config';

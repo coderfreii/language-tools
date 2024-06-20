@@ -10,7 +10,7 @@
 			"args": [
 				// "--disable-extensions",
 				"--extensionDevelopmentPath=${workspaceRoot}/extensions/vscode",
-				"--folder-uri=D:/code/work/other/baseProject"
+				"--folder-uri=${workspaceRoot}/plugins/vue-macros/playground/vue3"
 			],
 			"outFiles": [
 				"${workspaceRoot}/**/*.js"
@@ -42,7 +42,7 @@
 			"name": "Attach to Language Server",
 			"type": "node",
 			"request": "attach",
-			"port": 9700,
+			"port": 6009,
 			"restart": true,
 			"outFiles": [
 				"${workspaceRoot}/**/*.js"

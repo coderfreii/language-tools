@@ -11,11 +11,13 @@ function patchTypescriptLanguageFeaturesExtention() {
 		const tsExtension = forCompatible.tsExtension!;
 		const readFileSync = fs.readFileSync;
 		const extensionJsPath = require.resolve('./dist/extension.js', { paths: [tsExtension.extensionPath] });
-
+		
+		//放在里面会递归栈溢出
+		const enabledHybridMode = appContext.getCurrentHybridModeStatus();
+		const enabledTypeScriptPlugin = appContext.getCurrentTypeScriptPluginStatus();
 		// @ts-expect-error
 		fs.readFileSync = (...args) => {
-			const enabledHybridMode = appContext.getCurrentHybridModeStatus();
-			const enabledTypeScriptPlugin = appContext.getCurrentTypeScriptPluginStatus();
+
 
 			if (args[0] === extensionJsPath) {
 				let text = readFileSync(...args) as string;
