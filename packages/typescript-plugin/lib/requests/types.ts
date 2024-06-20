@@ -1,4 +1,3 @@
-// import type { Language } from '@vue/language-core';
 import type { Language } from '@volar/language-core/lib/types';
 import type * as ts from 'typescript';
 

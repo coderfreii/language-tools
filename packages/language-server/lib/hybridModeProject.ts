@@ -3,7 +3,6 @@ import type { LanguagePlugin } from '@volar/language-core/lib/types';
 import { createLanguageServiceEnvironment } from '@volar/language-server/lib/project/simpleProject';
 import type { LanguageServer, ProjectFacade } from '@volar/language-server/lib/types';
 import type { LanguageServiceEnvironment, ProviderResult } from '@vue/language-service';
-// import { Disposable, LanguageService, LanguageServiceEnvironment, createLanguage, createLanguageService, createUriMap, type ProviderResult } from '@vue/language-service';
 import { searchNamedPipeServerForFile, TypeScriptProjectLanguageServiceHost } from '@vue/typescript-plugin/lib/utils';
 import type * as ts from 'typescript';
 import { URI } from 'vscode-uri';

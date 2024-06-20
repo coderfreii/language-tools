@@ -1,4 +1,3 @@
-// import type { VirtualCode } from '@volar/language-core';
 import { Signal, signal } from 'computeds';
 import type * as ts from 'typescript';
 import type { VueCompilerOptions, VueLanguagePlugin } from '../types';

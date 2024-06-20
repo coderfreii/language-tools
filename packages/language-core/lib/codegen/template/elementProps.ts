@@ -9,7 +9,6 @@ import type { TemplateCodegenContext } from './context';
 import type { TemplateCodegenOptions } from './index';
 import { generateInterpolation } from './interpolation';
 import { generateObjectProperty } from './objectProperty';
-// import { toString } from '@volar/language-core';
 import { generateEventArg, generateEventExpression } from './elementEvents';
 import { toString } from 'muggle-string';
 

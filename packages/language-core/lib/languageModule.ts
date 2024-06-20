@@ -1,4 +1,3 @@
-// import { forEachEmbeddedCode, type LanguagePlugin } from '@volar/language-core';
 import type * as ts from 'typescript';
 import { getBasePlugins } from './plugins';
 import type { VueCompilerOptions, VueLanguagePlugin } from './types';
