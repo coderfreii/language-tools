@@ -42,7 +42,7 @@ to enabel it you should do some work as the follow
 
   "vueCompilerOptions": {
     "extensions":[".vue",".vtx"],
-    "pluginLoadPathForDebuggingPurpose":"${projectPath/plugins/vue-macros/playground/vue3",
+    "pluginLoadPathForDebuggingPurpose":"${projectPath}/plugins/vue-macros/playground/vue3",
    ...
    }
    
